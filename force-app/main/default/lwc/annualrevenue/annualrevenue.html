@@ -1,0 +1,10 @@
+<template>
+    <lightning-card title="Update Account Revenue" >
+      <div class="slds-p-around_medium">
+        <lightning-input type="number" label="Annual Revenue" value={annualRevenue} onchange={handleChange}></lightning-input>
+        <br/>
+        <lightning-button label="Update" variant="brand" onclick={handleUpdate}></lightning-button>
+      </div>
+    </lightning-card>
+    
+  </template>

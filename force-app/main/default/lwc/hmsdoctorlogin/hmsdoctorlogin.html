@@ -1,0 +1,52 @@
+<template>
+  <div class="card">
+    <div class="slds-card">
+      <div>
+        <img class="slds-align_absolute-center"  src={doctorLoginimg} alt="Doctor Login" style="justify-content: center; height: 100px; width: 100px; border-radius: 50%; background-color:white;"></img>
+      </div>  
+      <div class="slds-align_absolute-center heading" >DOCTOR LOGIN</div>
+      <div class="slds-m-left_medium slds-m-right_medium">
+        <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+      </div>
+      
+
+      <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+      </template>
+
+      <div class=slds-col>
+        <template if:true={errorMessage}>
+          <div class="error slds-var-p-around_small">
+            <span>{errorMessage}</span>
+          </div>
+        </template>
+        <template if:true={patientError}>
+          <div class="error slds-var-p-around_small">
+            <span>{patientError}</span>
+          </div>
+        </template>
+      </div>
+      
+      <div class="slds-grid slds-grid_vertical slds-align_absolute-center slds-card">
+        <div class="slds-size_10-of-12">
+          <lightning-input type="text" label="Username" style="background-color: white; color: black;" onchange={handleUserNameChange}></lightning-input>
+        </div>
+        <div class="slds-size_10-of-12">
+          <lightning-input type="password" label="Password" style="background-color: white; color: black;" onchange={handlePasswordChange} onkeypress={handleKeyPress}></lightning-input>
+        </div>
+        <div class="slds-size_10-of-12 slds-align_absolute-center">
+          <lightning-button label="Doctor LogIn" variant="brand" onclick={handleLogin} ></lightning-button>
+        </div>
+      </div>
+     
+      <div class="slds-p-around_small footer">
+        <div class="slds-m-left_medium slds-m-right_medium">
+          <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+        </div>
+        <a href="/ForgotPassword" style="padding: 2px;">Forgot your password?</a>
+        </div>
+      
+      
+      </div>
+  </div>
+  </template>

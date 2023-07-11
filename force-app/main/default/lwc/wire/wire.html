@@ -1,0 +1,12 @@
+<template>
+
+    <lightning-card>
+    <div class="slds-var-m-around_medium">
+        <template if:true={accountData}>
+            Name:{accountData.Name.value}<br/>
+            AnnualRevenue:{accountData.AnnualRevenue.value}<br/>
+        </template>
+    </div>
+        
+    </lightning-card>
+</template>

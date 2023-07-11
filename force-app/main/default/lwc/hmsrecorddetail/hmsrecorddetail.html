@@ -1,0 +1,19 @@
+<template>
+    <lightning-card>
+        <template if:true={ContactId}>
+            <div class="slds-m-top_small">
+                <lightning-button variant="brand" label="Edit" onclick={handleEdit}></lightning-button>
+            </div>
+            <lightning-record-form
+            object-api-name={objectApiName}
+            record-id={conid}
+            layout-type="Full"
+            mode="view"
+            
+            columns="2"
+            >
+        </lightning-record-form>
+        </template>
+    </lightning-card>
+    
+</template>

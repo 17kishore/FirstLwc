@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+  }
+  
+  .column {
+    flex: 1;
+  }
+.booked {
+  font-size: 18px;
+  color: green;
+ }

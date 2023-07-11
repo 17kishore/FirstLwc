@@ -1,0 +1,65 @@
+.title{
+    position: relative;
+    padding-bottom: 4px;
+    font-weight: bold;
+    color: white;
+    text-align-last: left;
+}
+.title::after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: #f58634;
+}
+.contactusIcon{
+    display: flex;
+    align-items: center;
+}
+.contact-text{
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 15px;
+    vertical-align: middle;
+    color: white;
+}
+.contactusIcon img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 5px;
+}
+.social-icons li{
+    display: inline-block;
+    margin-left: 20px;
+}
+.footer{
+    display: flex;
+    justify-content: center;
+    align-items: top;
+}
+.footer-section{
+    flex-grow: 1;
+    padding: 20px;
+    position:relative;
+}
+
+.footer-section:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    bottom: 0;
+    width: 1px;
+    transform: translateY(-50%);
+    height: 50%;
+    background-color: #000 
+}
+.card {
+    background-color: rgb(7, 23, 53);
+    padding: 2px;
+    border-radius: 10px;
+  }

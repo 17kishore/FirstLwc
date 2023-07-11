@@ -1,0 +1,31 @@
+<template>
+    <lightning-tabset>
+        <lightning-tab label="BOOK APPOITMENT">
+            One Content 1 !
+            <lightning-button label="New Account" onclick={createNew} ></lightning-button>
+        </lightning-tab>
+        <lightning-tab label="PATIENT RECORD" title="2nd tab extended title">
+            <lightning-card>
+                <template if:true={useremail}>
+                    Email:{mailId}
+                </template>
+                <br/>
+                <template if:true={ContactId}>
+                    ID:{conid}
+                    <lightning-record-form
+                        object-api-name={objectApiName}
+                        record-id={conid}
+                        layout-type="Full"
+                        mode="view"
+                        columns="3"
+                        >
+                        </lightning-record-form>
+                </template>
+               
+            </lightning-card>
+        </lightning-tab>
+        <lightning-tab label="PAY HERE">
+            Three Content !
+        </lightning-tab>
+    </lightning-tabset>
+</template>

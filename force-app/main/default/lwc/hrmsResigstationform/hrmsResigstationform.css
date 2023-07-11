@@ -1,0 +1,112 @@
+/* Card Styles */
+.slds-card {
+    border-radius: 1rem;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 1px 5px 0 rgba(0,0,0,0.08), 0 3px 1px -2px rgba(0,0,0,0.06);
+    padding-left: 1rem;
+    width: 45%;
+    background-color: rgb(32, 185, 152);
+    justify-content: center;
+
+  }
+  
+  .form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Heading Styles */
+  .heading {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  /* Error Message Styles */
+  .error {
+    color: #ff0000;
+    font-size:18px;
+    text-align: center;
+  }
+  
+  /* Input Field Styles */
+  .slds-form-element {
+    margin-bottom: 1rem;
+  }
+  
+  .slds-form-element__label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    color: #ffff;
+  }
+  
+  .slds-form-element__control {
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    width: 100%;
+  }
+  
+  /* Combobox Styles */
+  .slds-combobox {
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    width: 100%;
+    padding: 0.5rem;
+  }
+  
+  /* Grid Styles */
+  .slds-grid {
+    margin-top: 1rem;
+  }
+  
+  .slds-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .slds-size_5-of-12 {
+    width: 45%;
+    margin-right: 1rem;
+  }
+  
+  
+  
+  /* Horizontal Rule Styles */
+  hr {
+    border: none;
+    height: 1px;
+    background-color: #d8dde6;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .existing{
+    padding: 8px;
+    padding-bottom: 15px;
+  }
+  
+  .button {
+    text-align: center;
+    margin-top: 2rem;
+    
+  }
+  button {
+    background-color: white;
+    justify-content: center;
+    color:black;
+    font-size:0.8rem;
+    font-weight: small;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  button:hover {
+    background-color: rgb(124, 124, 212);
+    border: 1px solid #000;
+  }

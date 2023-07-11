@@ -1,0 +1,118 @@
+<template>
+    <div class="form">
+ 
+          <div class="quote">
+            <h6>SIGN UP FOR BEST HEALTHCARE SERVICES!</h6>
+          </div>
+
+          <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+          </template>
+      
+          <div class="slds-row">
+            <div class="slds-col">
+              <div class="slds-form-element">
+              <label for="firstname">First Name:</label>
+              <lightning-icon class="input-icon" icon-name="utility:user" alternative-text="username" size="xx-small"></lightning-icon>
+              <input type="text" id="fisrtname" name="firstName" placeholder="First Name" class="slds-input input-element" value={firstName} onchange={handleFirstNameChange} required>
+            </div>
+          </div>
+            <div class="slds-col">
+              <div class="slds-form-element">
+              <label for="lastname">Last Name:</label>
+              <lightning-icon class="input-icon" icon-name="utility:user" alternative-text="username" size="xx-small"></lightning-icon>
+              <input type="text" id="lastname" name="lastname" placeholder="Last Name" class="slds-input input-element" value={lastName} onchange={handleLastNameChange} required>
+            </div>
+          </div>
+          </div>
+    
+          <div class="slds-row">
+            <div class="slds-col">
+              <div class="slds-form-element">
+              <label for="gender">Gender:</label>
+              <select id="gender" name="gender" class="noicon-input-element" value={gender} onchange={handleGenderChange} required>
+                <option value="">Select</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+              
+            </div>
+          </div>
+            <div class="slds-col">
+              <div class="slds-form-element">
+              <label for="dob">Date of Birth:</label>
+              <input type="date" id="dob" name="dob" class="noicon-input-element" value={dob} onchange={handledobChange} required>
+            </div>
+          </div>
+          </div>
+  
+          <div class="slds-row">
+            <div class="slds-col">
+              <div class="slds-form-element">
+              <label for="phone">Phone:</label>
+              <lightning-icon class="input-icon" icon-name="utility:call" alternative-text="phone" size="xx-small"></lightning-icon>
+              <input type="tel" id="phone" name="phone"  placeholder="Phone Number" class="slds-input input-element" value={phone} onchange={handleNumberChange} required>
+            </div>
+          </div>
+            <div class="slds-col">
+              <div class="slds-form-element">
+                <label for="blood-group">Blood Group:</label>
+                <select id="blood-group" name="blood-group" class="noicon-input-element" value={bloodgroup} onchange={handlebloodgroupChange} required>
+                  <option value="">Select</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                </select>
+            </div>
+          </div>
+          </div>
+  
+          <div class="slds-row">
+              <div class="slds-col">
+                <div class="slds-form-element">
+                  <label for="address">Address:</label>
+                  <lightning-icon class="input-icon" icon-name="utility:checkin" alternative-text="Address" size="xx-small"></lightning-icon>
+                  <textarea id="address" name="address" rows="3" placeholder="Address" class="slds-input input-element" value={address} onchange={handleaddresschange} required></textarea>
+                </div>
+              </div>
+            </div>    
+  
+  
+          <div class="slds-row">
+            <div class="slds-col tooltipEmail">
+              <div class="slds-form-element">
+              <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left tooltip">
+              <label for="email">Email:</label>
+              <lightning-icon class="input-icon" icon-name="utility:email" alternative-text="email" size="xx-small"></lightning-icon>
+              <input type="email" id="email" name="email" placeholder="E-Mail" class="slds-input input-element" value={email} onkeyup={handleEmailChange} pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$" oninvalid={onEmailInvalid} oninput={onEmailInput} onclick={onEmailClick} onblur={onEmailBlur} required>
+            </div>
+          </div>
+          </div>
+            <div class="slds-col usernameColumn">
+              <div class="slds-form-element">
+              <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left tooltip">
+              <label for="username">Username:</label>
+              <lightning-icon class="input-icon" icon-name="utility:user" alternative-text="Username" size="xx-small"></lightning-icon>
+              <input type="text" id="username" name="username" placeholder="Username" class="slds-input input-element" value={username} disabled required>
+            </div>
+          </div>
+          </div>
+        </div>
+    
+          <div class="button">
+            
+            <button type="submit" onclick={handleRegistration}>Register</button>
+           
+          </div>
+  
+          <div class="Already-have-account">
+            <a href="/login">Already have an account?</a>
+          </div> 
+        </div>
+  </template>

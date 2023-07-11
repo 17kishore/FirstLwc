@@ -1,0 +1,17 @@
+<template>
+
+    <lightning-card>
+        <lightning-input type="number" label="Enter Salary Range" onchange={handleChange}></lightning-input>
+        <br/>
+        <template for:each={currentSalary} for:item="emp">
+            <div key={emp.name} class="result">
+              Employee Name:  {emp.name}<br/>
+              Employee Salary: {emp.salary}<br/>
+              Employee Position: {emp.position}<br/>
+              ---------------------------------------------------
+            </div>
+
+        </template>
+    </lightning-card>
+    
+</template>

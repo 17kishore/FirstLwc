@@ -1,0 +1,120 @@
+.title {
+  font-size: x-large;
+  font-weight: bold;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: 90%;
+  overflow-y: auto;
+  width: 60%;
+}
+
+.popup h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.popup .slds-grid {
+  margin-bottom: 1rem;
+}
+
+.popup .slds-align_absolute-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup .slds-col {
+  display: flex;
+}
+
+.popup .slds-size_5-of-12 {
+  width: 50%;
+  padding-right: 1rem;
+}
+
+.popup .slds-form-element .slds-form-element__label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.popup .slds-grid .slds-align_absolute-right .slds-size_5-of-12 {
+  margin-left: 0.6rem;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.popup .slds-grid .slds-align_absolute-right .slds-size_5-of-12 .slds-form-element:not(.slds-textarea) {
+  display: flex;
+  align-items: center;
+}
+
+.popup .slds-grid .slds-align_absolute-right .slds-size_5-of-12 .slds-form-element label {
+  font-size: smaller;
+  font-weight: bold;
+  font-family: "Times New Roman", Times, serif;
+  margin: 0 0.5rem 0 0;
+
+}
+
+.popup .slds-grid .slds-align_absolute-right .slds-size_5-of-12 .slds-form-element .slds-form-element__control {
+  flex-grow: 1;
+}
+
+.popup .footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.popup .footer button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-family: "Times New Roman", Times, serif;
+  background-color: #0070d2;
+  color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+.popup .footer button:hover {
+  background-color: #005fbf;
+}
+
+.custom-textarea {
+  --sds-c-textarea-sizing-min-height:120px;
+}
+.comment-container {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  max-width: 400px;
+  background-color: rgb(41, 148, 68);
+  padding: 10px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+
+
+.comment {
+  font-size: 20px;
+  font-family: "Times New Roman", Times, serif;
+  color: #fff;
+  text-align: center;
+}

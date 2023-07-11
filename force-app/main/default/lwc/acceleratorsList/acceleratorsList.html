@@ -1,0 +1,38 @@
+<template>
+		<div class="grid-container slds-m-around_medium">
+			<div class="left-side">
+				<h3>Accelerators</h3>
+			</div>
+			<div class="container">
+					
+                    
+				<lightning-combobox label="Type" options={TypecomboboxOptions} onchange={handleChange} class="custom-combobox">
+				</lightning-combobox>
+		  
+				<lightning-combobox label="Cloud Type" value={cloudTypeValue} options={cloudTypeOptions} onchange={handleCloudTypeChange} class="custom-combobox">
+				</lightning-combobox>
+		  
+				<lightning-combobox label="Industry" value={industryValue} options={industryOptions} onchange={handleIndustryChange} class="custom-combobox">
+				</lightning-combobox>
+			  </div>
+			</div>
+		  
+			<div class="slds-m-around_medium">
+			  <template if:true={filteredData}>
+				<div class="Tablecontainer">
+				  <lightning-datatable
+					key-field="Id"
+					data={filteredData}
+					show-row-number-column
+					columns={columns}
+					hide-checkbox-column
+					onrowaction={handleCellAction}
+					class="custom-datatable slds-text-align_center"
+				  >
+				  </lightning-datatable>
+					<p>{startingRecord} to {endingRecord} of {totalRecordCount}. page {page} of {totalPage}</p>
+            		<c-data-table-child onprevious={prevHandler} onnext={nextHandler}></c-data-table-child>
+				</div>
+			</template>	
+		</div>
+</template>

@@ -1,0 +1,13 @@
+<template>
+    <lightning-card title="wireGetRelatedListRecords">
+        <template lwc:if={records}>
+            <div class="slds-m-around_medium">
+                <template for:each={records} for:item="rec">
+                    <p key={rec.fields.Id.value}>
+                        {rec.fields.Name.value}
+                    </p>
+                </template>
+            </div>
+        </template>
+    </lightning-card>
+</template>

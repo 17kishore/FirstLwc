@@ -1,0 +1,13 @@
+<template>
+    <lightning-card>
+        <template if:true={bookedslots}>
+            <template for:each={lstBookedSlots} for:item="slot">
+                <div key={slot}>
+                    {slot}
+                </div>
+            </template>
+
+        </template>
+    </lightning-card>
+    
+</template>

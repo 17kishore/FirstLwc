@@ -1,0 +1,16 @@
+<template>
+    <lightning-card  title="PROFILE">
+        <template if:true={Patient}>
+            <lightning-record-form
+            object-api-name={objectApiName}
+            record-id={patientId}
+            layout-type="Full"
+            mode="readonly"
+            columns="2"
+            class="field-style"
+            >
+        </lightning-record-form>
+        </template>
+    </lightning-card>
+    
+</template>

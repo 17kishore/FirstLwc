@@ -1,0 +1,84 @@
+<template>
+    <lightning-card title="Completed Appointments">
+        <template if:false={listofCompletedAppointments}>
+                 <div class="slds-align_absolute-center">You have no Completed Appointments...</div>
+        </template>
+        <template if:true={listofCompletedAppointments}>
+            <div class="container">
+                <div class="column">
+                  <ul>
+                <div class="slds-scrollable_y" style="height:24rem; width: 50rem" tabindex="0">
+                    <template for:each={listofCompletedAppointments} for:item="appointment">
+                      <li key={appointment.Id}>
+                    <div class="doctor-details-box slds-p-around_small">
+                        <div class="slds-box slds-align_absolute-center">
+                    <div>
+                    
+                        <p><strong>Appointment Id:</strong> &nbsp;&nbsp;{appointment.Name} </p>
+                        <p><strong>Patient Name:</strong> &nbsp;&nbsp;{appointment.patient_name__c}</p>
+                        <p><strong>Patient Age:</strong> &nbsp;&nbsp;{appointment.Patient_Age__c}</p>
+                        <p><strong>Patient Email:</strong>&nbsp;&nbsp; {appointment.Patient_Email__c} </p>
+                        <p><strong>Patient Phone Number:</strong> &nbsp;&nbsp;{appointment.Patient_Number__c} </p>
+                        <p><strong>Doctor Specialization:</strong>&nbsp;&nbsp; {appointment.Specializtion__c} </p>
+                        <p><strong>Doctor Name:</strong> &nbsp;&nbsp;{appointment.Doctor_Name__c} </p>
+                        <p><strong>Location: </strong>&nbsp;&nbsp;Moeka Hospital </p>
+                        <p><strong>Appointment Date:</strong> &nbsp;&nbsp;{appointment.Appointment_Date__c} </p>
+                        <p><strong>Appointment Time:</strong> &nbsp;&nbsp;{appointment.Booked_Slot__c} </p>
+                        <p><strong>Appointment Status:</strong>&nbsp;&nbsp;{appointment.Appointment_Status__c}</p>
+                        <br/>
+                       <lightning-button label="View Prescription" variant="success" onclick={handlePrescription} value={appointment.Id} class="slds-m-right_small"></lightning-button>
+                      
+                       <lightning-button label="Download Prescription" variant="brand" onclick={generateData} value={appointment.Id} data-patient-name={appointment.patient_name__c} data-patient-age={appointment.Patient_Age__c} data-doctor-name={appointment.Doctor_Name__c}></lightning-button>
+                    
+    
+                    </div>
+    
+                        </div>
+                    </div>
+                      </li>
+                    </template>
+                </div>
+                  </ul>
+                </div>
+              </div>
+    
+        </template>
+    </lightning-card>
+    <template if:true={showModal}>
+        <template if:true={prescription}>
+        
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                <div class="booked slds-align_absolute-center"><lightning-record-form
+                    record-id={prescription}
+                    object-api-name="Prescription__c"
+                    layout-type="Full"
+                    columns="4"
+                    mode="readOnly"
+                >
+                </lightning-record-form></div>
+            </div>
+            <div class="slds-modal__footer">
+            <button class="slds-button slds-button_brand" onclick={handleCancel}>Cancel</button>
+            </div>
+            </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+    </template>
+    <template if:true={excep}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
+                <div class="booked slds-align_absolute-center">No Prescription provided by the doctor!</div>
+            </div>
+            <div class="slds-modal__footer">
+            <button class="slds-button slds-button_brand" onclick={excepCancel}>Cancel</button>
+            </div>
+            </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+       </template>
+    
+</template>

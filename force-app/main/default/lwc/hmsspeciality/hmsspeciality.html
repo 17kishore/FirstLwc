@@ -1,0 +1,21 @@
+
+<template>
+    <lightning-card>
+        <div class="title">Choose Specialization:</div>
+        <template if:true={lstSpecialization}>
+            <template for:each={specializationRows} for:item="row">
+                <div key={row} class="slds-grid slds-wrap slds-grid_vertical-space">
+                    <template for:each={row} for:item="spec">
+                        <div key={spec} class="slds-col slds-size_1-of-4 slds-m-right_xx-large" style="padding: 8px;">
+                            <div class="button-container">
+                                <button class="same-size-button custom-button slds-button slds-button_success" onclick={handleButtonClick} data-spec={spec}>
+                                    {spec}
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </template>
+    </lightning-card>
+</template>

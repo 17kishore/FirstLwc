@@ -1,0 +1,81 @@
+<template>
+  <lightning-card>
+    <template if:false={listofBookedAppointments}>
+             <div class="slds-align_absolute-center">Loading Please Wait...</div>
+    </template>
+    <template if:true={listofBookedAppointments}>
+        <div class="container">
+            <div class="column">
+              <ul>
+            <div class="slds-scrollable_y" style="height:21rem; width: 50rem" tabindex="0">
+                <template for:each={listofBookedAppointments} for:item="appointment">
+                  <li key={appointment.Id}>
+                <div class="doctor-details-box slds-p-around_small">
+                    <div class="slds-box slds-theme_shade slds-align_absolute-center">
+                <div>
+                
+                    Patient Id: {appointment.Patient_Id__c} <br/>
+                    Patient Name: {appointment.patient_name__c} <br/>
+                    Patient Email: {appointment.Patient_Email__c} <br/>
+                    Patient Phone Number: {appointment.Patient_Number__c} <br/>
+                    Doctor Specialization: {appointment.Specializtion__c} <br/>
+                    Doctor Name: {appointment.Doctor_Name__c} <br/>
+                    Location: Moeka Hospital <br/>
+                    Appointment Date: {appointment.Appointment_Date__c} <br/>
+                    Appointment Time: {appointment.Booked_Slot__c} <br/>
+                <br/>
+                <lightning-button label="Cancel" variant="destructive" onclick={handleCancel} value={appointment.Id} class="slds-m-right_small"></lightning-button>
+                <lightning-button label="Confirm Appointment" variant="success" onclick={handleConfirm} value={appointment.Id}   data-appointment-date={appointment.Appointment_Date__c}  data-booked-slot={appointment.Booked_Slot__c}></lightning-button>
+
+                </div>
+
+                    </div>
+                </div>
+                  </li>
+                </template>
+            </div>
+              </ul>
+            </div>
+          </div>
+
+    </template>
+</lightning-card>
+   <template if:true={showModal}>
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleNoCancel}>
+        <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+        </svg>
+        <span class="slds-assistive-text">Cancel and close</span>
+        </button>
+        <div class="slds-modal__header">
+        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Cancel Appointment</h1>
+        </div>
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <div class="slds-align_absolute-center"> Are You Sure Want to Cancel the Appointment</div>
+        </div>
+        <div class="slds-modal__footer">
+        <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={handleNoCancel}>No</button>
+        <button class="slds-button slds-button_brand" onclick={appointmentcancelled}>Yes</button>
+        </div>
+        </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+   </template>
+   <template if:true={appointmentConfirmedModal}>
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+            <div class="booked slds-align_absolute-center">Your AppointMent Has Been Booked</div>
+        </div>
+        <div class="slds-modal__footer">
+        <button class="slds-button slds-button_brand" onclick={appointmentOkay}>OK</button>
+        </div>
+        </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+   </template>
+     
+    
+</template>

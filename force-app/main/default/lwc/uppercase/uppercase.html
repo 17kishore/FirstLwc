@@ -1,0 +1,19 @@
+<template>
+
+    <lightning-card>
+          <lightning-input name="input1" label="Enter the Words" onchange={handleChange}></lightning-input>
+          <br/>
+        <div class="result">
+            <template if:true={isShow}>
+                {upperCaseWords}
+            </template>
+        </div>
+        <div class="errorResult">
+            <template if:false={isShow}>
+                {errorMessage }
+            </template>
+        </div>
+          
+    </lightning-card>
+    
+</template>

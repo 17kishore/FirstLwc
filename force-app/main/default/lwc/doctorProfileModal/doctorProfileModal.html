@@ -1,0 +1,101 @@
+<template>
+
+        <h1>Welcome {storeUserName}</h1>
+        <lightning-card>
+            <template if:true={Doctor}>
+                <lightning-record-form
+                object-api-name={objectApiName}
+                record-id={DoctorId}
+                layout-type="Full"
+                mode="view"
+                columns="2"
+                >
+            </lightning-record-form>
+            </template>
+        </lightning-card>
+        <lightning-button variant="brand" label="Edit Profile"  onclick={handleClick} class="slds-float_right ; slds-p-right_small"></lightning-button>
+
+        <template if:true={showModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleCancle}>
+                <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true" >
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                </svg>
+                <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">DOCTOR PROFILE</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-box slds-theme_default">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                            <thead>
+                                <tr>
+                                      <th class="" scope="col">
+                                        <div class="slds-truncate">FIELD</div>
+                                      </th>
+                                      <th class="" scope="col">
+                                          <div class="slds-truncate">CHANGE TO</div>
+                                      </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                    <tr >
+                                        <td>FIRST NAME</td>
+                                        <td><lightning-input type="text" variant="standard"  class="fname"></lightning-input></td>
+                                    </tr>
+                                    <tr >
+                                        <td>LAST NAME</td>
+                                        <td><lightning-input type="text" variant="standard"  class="lname"></lightning-input></td>
+                                    </tr>
+                                    <tr >
+                                        <td>MOBILE NUMBER</td>
+                                        <td><lightning-input type="text" variant="standard"  class="phone"></lightning-input></td>
+                                    </tr>
+                                    <tr >
+                                        <td>EMAIL</td>
+                                        <td><lightning-input type="text" variant="standard"  class="email"></lightning-input></td>
+                                    </tr>
+                                    <tr >
+                                        <td>QUALIFICATION</td>
+                                        <td><lightning-input type="text" variant="standard" class="quali"></lightning-input></td>
+                                    </tr>
+                                    <tr >
+                                        <td>EXPERIENCE</td>
+                                        <td><lightning-input type="text" variant="standard" class="exp"></lightning-input></td>
+                                    </tr>
+                                    <tr >
+                                        <td>CONSULTANT FEE</td>
+                                        <td><lightning-input type="text" variant="standard" class="fees"></lightning-input></td>
+                                    </tr>
+                                    <tr >
+                                        <td>SPECIALIZATION</td>
+                                        <td>
+                                            <lightning-combobox
+                                                        value={value}
+                                                        placeholder="Select Specialization"
+                                                        options={options}
+                                                        onchange={handleChange} >
+                                            </lightning-combobox>
+                                        </td>
+                                    </tr>
+                                    <tr >
+                                        <td>ADDRESS</td>
+                                        <td><lightning-input type="text" variant="standard" class="add"></lightning-input></td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>   
+                <div class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={handleCancle} >Cancel</button>
+                <button class="slds-button slds-button_brand" onclick={handleSave}>Save</button>
+                </div>
+                </div>
+                </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+            
+</template>

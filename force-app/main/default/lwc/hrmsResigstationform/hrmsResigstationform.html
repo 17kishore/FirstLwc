@@ -1,0 +1,89 @@
+<template>
+    
+    <div class="form">
+        <div class="slds-card">
+            <div style="padding-top: 10px;">
+                <img class="slds-align_absolute-center"  src={addPatientimg} alt="Doctor Login" style="position: top-center; justify-content: center; height: 100px; width: 100px; border-radius: 60%; background-color: white; "></img>
+              </div>
+        <div class="slds-align_absolute-center heading" style="margin-top: 1rem;">SIGN UP FOR BEST HEALTHCARE SERVICES!</div>
+        <div class="slds-m-left_medium slds-m-right_medium">
+        <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+        </div>
+
+        <div class=slds-col>
+            <template if:true={errorMessage}>
+              <div class="error slds-var-p-around_small">
+                <span>{errorMessage}</span>
+              </div>
+            </template>
+        </div>
+
+        <div class="slds-grid">
+            <div class="slds-col slds-align_absolute-center">
+                <div class="slds-size_5-of-12">
+                    <lightning-input type="text" label="First Name" onchange={handleFirstNameChange}></lightning-input>
+                </div>
+                <div class="slds-size_5-of-12">
+                    <lightning-input type="text" label="Last Name" onchange={handleLastNameChange}></lightning-input>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid">
+            <div class="slds-col slds-align_absolute-center">
+                <div class="slds-size_5-of-12">
+                <lightning-combobox
+                        name="gender"
+                        label="Gender"
+                        value={selectedGenderValue}
+                        placeholder="--None--"
+                        options={genderOptions}
+                        onchange={handleGenderChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-size_5-of-12">
+                    <lightning-input type="email" label="Email" onchange={handleEmailChange}></lightning-input>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid">
+            <div class="slds-col slds-align_absolute-center">
+                <div class="slds-size_5-of-12">
+                    <lightning-input type="date" label="Date of Birth" onchange={handleDateChange}></lightning-input>
+                </div>
+                <div class="slds-size_5-of-12">
+                    <lightning-input type="tel" label="Phone" onchange={handlePhoneChange}></lightning-input>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid">
+            <div class="slds-col slds-align_absolute-center">
+                <div class="slds-size_5-of-12">
+                <lightning-combobox
+                        name="bloodgroup"
+                        label="Blood Group"
+                        value={selectedBloodgroupValue}
+                        placeholder="--None--"
+                        options={bloodgroupOptions}
+                        onchange={handleBloodgroupChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-size_5-of-12">
+                    <lightning-input type="textarea" label="Address" onchange={handleAddressChange}></lightning-input>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid  slds-grid_vertical slds-align_absolute-center">
+            <div class="slds-col slds-align_absolute-center">
+                <button type="reset" onclick={handleRegistration}>Register</button>
+        </div>
+        <div class="slds-m-left_medium slds-m-right_medium">
+            <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+        </div>
+        
+        <div class="slds-col existing slds-align_absolute-center">
+            <a href="\login">Already have an account?</a>
+        </div>
+    </div>
+    </div>
+    </div>
+</template>

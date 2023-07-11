@@ -1,0 +1,28 @@
+<template>
+    <lightning-card>
+        <lightning-tabset >
+            <lightning-tab label="Account" name="Account" onactive={handleTabChange}></lightning-tab>
+            <lightning-tab label="Contact" name="Contact" onactive={handleTabChange}></lightning-tab>
+            <lightning-tab label="Opportunity" name="Opportunity" onactive={handleTabChange}></lightning-tab>
+        </lightning-tabset>
+
+        <template if:true={acc}>
+           <lightning-card class="slds-align_absolute-center">
+                Accounts
+            <a href="#" title="login">/log</a>
+           </lightning-card>  
+           
+             
+        </template>
+        <template if:true={con}>
+            <lightning-card class="slds-align_absolute-center" >
+                contact
+           </lightning-card> 
+        </template>
+        <template if:true={opp}>
+            <lightning-card class="slds-align_absolute-center">
+                Opportunity
+           </lightning-card> 
+        </template>
+    </lightning-card>
+</template>

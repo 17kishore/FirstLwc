@@ -1,0 +1,13 @@
+.button-container:hover lightning-button::before {
+    text-indent: -9999px;
+}
+.error {
+    color: red;
+    font-size:18px;
+}
+.title{
+    font-size:x-large;
+    font-weight: bold;
+    margin-left: 9px;
+    margin-bottom: 5px;
+}

@@ -1,0 +1,149 @@
+<template>
+    <lightning-card >
+        <div class="title">List of Doctors</div>
+    <template if:false={listOfDoctors} >
+        <div class="slds-align_absolute-center">Please Choose Specialization before booking appointment...</div>
+    </template>
+    <template if:true={nodoctor} >
+        <div class="slds-align_absolute-center">{nodoctor}</div>
+    </template>
+        <template if:true={listOfDoctors}>
+            <div class="slds-scrollable_y" style="height: 13rem; width: 38rem" tabindex="0">
+                <template for:each={listOfDoctors} for:item="doctor">
+                    <div key={doctor.Id}>
+                        <div class="doctor-details-box slds-p-around_small">
+                            <div class="slds-box slds-theme_shade">
+                                <p><strong>Name:</strong> {doctor.Name}</p>
+                                <p><strong>Specialization:</strong> {doctor.Specialization__c}</p>
+                                <p><strong>Achievements:</strong> {doctor.Achievements__c}</p>
+                                <p><strong>Experience:</strong> {doctor.Experience__c}</p>
+                                <p><strong>Consultant Fee:</strong> {doctor.Consultant_Fee__c}</p>
+                                <div class="slds-m-top_small button-container">
+                                    <lightning-button variant="brand" label={buttonLabel1} value={doctor.Id} class="slds-m-right_small" onclick={handleTodayClick}></lightning-button>
+                                    <lightning-button variant="brand" label={buttonLabel2} value={doctor.Id} onclick={handleTomorrowClick}></lightning-button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </lightning-card>
+
+    <template if:true={showTodayModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleCancel}>
+                    <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 class="slds-modal__title slds-hyphenate">Schedule Appointment on {getTodaysDate}</h1><br/>
+                    <template if:true={taboneError}>
+                       <div class="error">{taboneError}</div>
+                    </template>
+                    <template if:true={noTodaySlot}>
+                        <div class="error">{noTodaySlot}</div>
+                     </template>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium">
+                   
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_6-of-12">
+                                    <div style="margin-left: 1rem;">SLOTS BOOKED ON {getTodaysDate}</div>
+                                    <div class="doctor-details-box slds-p-around_small">
+                                        <div class="slds-box slds-theme_shade">
+                                            <template if:true={tabOneBookedSlot}>
+                                                <template for:each={tabOneBookedSlot} for:item="slot">
+                                                    <div key={slot}>{slot}</div>
+                                                </template>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_6-of-12">
+                            <template if:true={noTodaySchedule}>
+                               <div class="error slds-align_absolute-center">{noTodaySchedule}</div> 
+                            </template>
+                                    <template if:true={tabOneRemaingSlot}>
+                                        <lightning-combobox
+                                            label="Available Slots"
+                                            placeholder="Select an option"
+                                            options={tabOneRemaingSlot}
+                                            onchange={tabOneBookSlot}
+                                        ></lightning-combobox>
+                                    </template>
+                                </div>
+                            </div>
+                        
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={handleCancel}>Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={handleTodayConfirm}>Book Slot</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+   <template if:true={showTomorrowModal}>
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleCancel}>
+                <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                </svg>
+                <span class="slds-assistive-text">Cancel and close</span>
+            </button>
+            <div class="slds-modal__header">
+                <h1 class="slds-modal__title slds-hyphenate">Schedule Appointment on {getTomorrowsDate}</h1><br/>
+                <template if:true={tabtwoError}>
+                   <div class="error">{tabtwoError}</div>
+                </template>
+                <template if:true={noTomorrowSlot}>
+                    <div class="error">{noTomorrowSlot}</div>
+                 </template>
+            </div>
+            <div class="slds-modal__content slds-p-around_medium">
+               
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_6-of-12">
+                                <div style="margin-left: 1rem;">SLOTS BOOKED ON {getTomorrowsDate}</div>
+                                <div class="doctor-details-box slds-p-around_small">
+                                    <div class="slds-box slds-theme_shade">
+                                        <template if:true={tabTwoBookedSlot}>
+                                            <template for:each={tabTwoBookedSlot} for:item="slot">
+                                                <div key={slot}>{slot}</div>
+                                            </template>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_6-of-12">
+                                <template if:true={noTomorrowSchedule}>
+                                    <div class="error slds-align_absolute-center">{noTomorrowSchedule}</div> 
+                                 </template>
+                                <template if:true={tabTwoRemaingSlot}>
+                                    <lightning-combobox
+                                        label="Available Slots"
+                                        placeholder="Select an option"
+                                        options={tabTwoRemaingSlot}
+                                        onchange={tabTwoBookSlot}
+                                    ></lightning-combobox>
+                                </template>
+                            </div>
+                        </div>
+                    
+            </div>
+            <div class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={handleCancel}>Cancel</button>
+                <button class="slds-button slds-button_brand" onclick={handleTomorrowConfirm}>Book Slot</button>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+   </template>
+</template>
+

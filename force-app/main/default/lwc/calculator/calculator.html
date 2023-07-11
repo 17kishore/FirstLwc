@@ -1,0 +1,17 @@
+<template>
+    <lightning-card title="Calculator App">
+    <div>
+        <lightning-input name="value1" label="Enter a Value" onchange={handleChange} value={firstValue}  pattern="^[0-9]*\.?[0-9]*$" required ></lightning-input>
+        <lightning-input name="value2" label="Enter a value" onchange={handleChange} value={secondValue}   pattern="^[0-9]*\.?[0-9]*$" required ></lightning-input><br/>
+     <div class="button-group">
+        <lightning-button variant="brand" name="ADD" label="ADD"   onclick={handleClick} style="margin-right:8px"></lightning-button>
+        <lightning-button variant="brand" name="SUB" label="SUB"   onclick={handleClick} style="margin-right:8px"></lightning-button>
+        <lightning-button variant="brand" name="MUL" label="MUL"   onclick={handleClick} style="margin-right:8px"></lightning-button>
+        <lightning-button variant="brand" name="DIV" label="DIV"   onclick={handleClick} style="margin-right:8px"></lightning-button>
+        <lightning-button variant="brand" name="CLEAR" label="CLEAR" onclick={handleClick} style="margin-right:8px"></lightning-button>
+    </div>
+     <div class="spacer"></div>
+       <p class="result"> Answer : {result} </p>
+    </div>
+    </lightning-card>
+</template>

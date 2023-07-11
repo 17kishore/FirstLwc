@@ -1,0 +1,50 @@
+<template>
+    <lightning-card>
+
+      <div class="slds-align_absolute-center heading" style="margin-top: 1rem;">DOCTOR LOGIN</div>
+      <div class="slds-m-left_medium slds-m-right_medium">
+        <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+      </div>
+      
+     <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+      </template>
+
+      <div class=slds-col>
+        <template if:true={errorMessage}>
+          <div class="error slds-var-p-around_small">
+            <span>{errorMessage}</span>
+          </div>
+        </template>
+        <template if:true={patientError}>
+          <div class="error slds-var-p-around_small">
+            <span>{patientError}</span>
+          </div>
+        </template>
+      </div>
+      
+      <div class="slds-grid slds-grid_vertical slds-align_absolute-center">
+        <div class="slds-size_8-of-12">
+          <lightning-input type="text" label="Username" onchange={handleUserNameChange}></lightning-input>
+        </div>
+        <div class="slds-size_8-of-12">
+          <lightning-input type="password" label="Password" onchange={handlePasswordChange}></lightning-input>
+        </div>
+        <div class="slds-size_8-of-12 slds-align_absolute-center">
+          <lightning-button label="Doctor Log In" variant="brand" onclick={handleLogin}></lightning-button>
+        </div>
+      </div>
+     
+      <div class="slds-p-around_small footer">
+
+        <div class="slds-m-left_medium slds-m-right_medium">
+          <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+        </div>
+        <a href="/ForgotPassword">Forgot your password?</a>&nbsp;&nbsp;
+        <a href="/selfRegister" class="slds-float_right">New Patient? Click here</a>
+      </div>
+      
+      
+    </lightning-card>
+  </template>
+  

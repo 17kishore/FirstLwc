@@ -1,0 +1,113 @@
+<template>
+   
+    <template if:false={records}>
+        <div class="slds-align_absolute-center title">No Current Appointments you have...</div>     
+    </template>
+    <template if:true={records}>
+    <lightning-card title="Current Appointments">
+        <lightning-datatable
+            key-field="id"
+            data={records}
+            show-row-number-column
+            columns={columns}
+            hide-checkbox-column
+            onrowaction={handleclick}
+            is-editable
+            >
+        </lightning-datatable>  
+    </lightning-card>      
+    </template>  
+
+    <!--for prescription pop-up -->
+    <template if:true={showPrescriptionPopup}>
+        <div class="popup">
+            <h3>Prescription</h3>
+            <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+            <div class="slds-grid">
+                <div class="slds-col slds-align_absolute-center">
+                    <div class="slds-size_5-of-12">
+                        <lightning-textarea  type="text" label="Patient Diagnosis" placeholder="Diagnosis" maxlength="1000" onchange={handlePatientDiagnosisChange}></lightning-textarea>
+                    </div>
+                    <div class="slds-size_5-of-12">
+                        <lightning-input type="text" label="Blood pressure" maxlength="1000" placeholder="Ex: 120/90 mm Hg &#10;  90&deg;" onchange={handleBPtempChange}></lightning-input>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid">
+                <div class="slds-col slds-align_absolute-center">
+                    <div class="slds-size_5-of-12">
+                        <lightning-textarea class="custom-textarea" type="textarea" label="Medication 1" maxlength="1000" placeholder="Drug Name-Dosage&#10;Quantity&#10;Frequency(1-0-1)&#10;Remarks" onchange={handleMedication1Change}></lightning-textarea>
+                    </div>
+                    <div class="slds-size_5-of-12">
+                        <lightning-textarea class="custom-textarea" type="textarea" label="Medication 2" maxlength="1000" placeholder="Drug Name-Dosage&#10;Quantity&#10;Frequency(1-0-1)&#10;Remarks" onchange={handleMedication2Change}></lightning-textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid">
+                <div class="slds-col slds-align_absolute-center">
+                    <div class="slds-size_5-of-12">
+                        <lightning-textarea class="custom-textarea" type="textarea" label="Medication 3" maxlength="1000" placeholder="Drug Name-Dosage&#10;Quantity&#10;Frequency(1-0-1)&#10;Remarks" onchange={handleMedication3Change}></lightning-textarea>
+                    </div>
+                    <div class="slds-size_5-of-12">
+                        <lightning-textarea class="custom-textarea" type="textarea" label="Medication 4" maxlength="1000" placeholder="Drug Name-Dosage&#10;Quantity&#10;Frequency(1-0-1)&#10;Remarks" onchange={handleMedication4Change}></lightning-textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid">
+                <div class="slds-col slds-align_absolute-center">
+                    <div class="slds-size_5-of-12">
+                        <lightning-textarea class="custom-textarea" type="textarea" label="Medication 5" maxlength="1000" placeholder="Drug Name-Dosage&#10;Quantity&#10;Frequency(1-0-1)&#10;Remarks" onchange={handleMedication5Change}></lightning-textarea>
+                    </div>
+                    <div class="slds-size_5-of-12">
+                        <lightning-textarea class="custom-textarea" type="text-area" label="Medication 6" maxlength="1000" placeholder="Drug Name-Dosage&#10;Quantity&#10;Frequency(1-0-1)&#10;Remarks" onchange={handleMedication6Change}></lightning-textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid">
+                <div class="slds-col slds-align_absolute-center">
+                    <div class="slds-size_5-of-12">
+                        <lightning-textarea class="custom-textarea" type="textarea" label="Medication 7" maxlength="1000" placeholder="Drug Name-Dosage&#10;Quantity&#10;Frequency(1-0-1)&#10;Remarks" onchange={handleMedication7Change}></lightning-textarea>
+                    </div>
+                    <div class="slds-size_5-of-12">
+                        <lightning-textarea class="custom-textarea" type="textarea" label="Medication 8" maxlength="1000" placeholder="Drug Name-Dosage&#10;Quantity&#10;Frequency(1-0-1)&#10;Remarks" onchange={handleMedication8Change}></lightning-textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid">
+                <div class="slds-col slds-align_absolute-center">
+                    <div class="slds-size_5-of-12">
+                        <lightning-textarea class="custom-textarea" type="textarea" label="Medication 9" maxlength="1000" placeholder="Drug Name-Dosage&#10;Quantity&#10;Frequency(1-0-1)&#10;Remarks" onchange={handleMedication9Change}></lightning-textarea>
+                    </div>
+                    <div class="slds-size_5-of-12">
+                        <lightning-textarea class="custom-textarea" type="textarea" label="Medication 10"  maxlength="1000" placeholder="Drug Name-Dosage&#10;Quantity&#10;Frequency(1-0-1)&#10;Remarks" onchange={handleMedication10Change}></lightning-textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid">
+                <div class="slds-col slds-align_absolute-left">
+                    <div class="slds-size_5-of-12" style="margin-left: 0.8rem;">
+                        <div class="slds-grid">
+                            <div class="slds-col">
+                                <lightning-textarea class="custom-textarea" type="textarea" label="Tests" maxlength="1000" placeholder="Test 1&#10;Test 2&#10;Test 3..." onchange={handleTestChange}></lightning-textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+        <div class="slds-p-around_small footer">
+            <div slds-col slds-align_absolute-right>
+                <button onclick={handleCancel}>Close</button>
+                <button onclick={handleSave}>Save</button>
+            </div>
+        </div>
+      </div>
+    </template>
+     <!-- Comment display section -->
+     <template if:true={commentVisible}>
+        <div class="comment-container">
+            <div class="comment">{commentText}</div>
+        </div>
+    </template>
+    
+</template>

@@ -1,0 +1,34 @@
+.dummy{
+	color : black;
+}
+h3 {
+    font-size: 2rem;
+    margin: 0.5rem;
+    font-family: "Times New Roman", Times, serif;
+  }
+.container .custom-combobox {
+	margin-right: 30px;
+}
+.custom-combobox >label {
+  font-weight: bolder;
+}
+
+.custom-combobox {
+	width: 250px; /* Adjust the width as per your preference */ 
+}
+.container{
+	width: 100%;
+    margin: 0 auto;
+	display: flex;
+	justify-content: flex-end;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px;
+ 
+  
+}
+span{
+	justify-content: center;
+}

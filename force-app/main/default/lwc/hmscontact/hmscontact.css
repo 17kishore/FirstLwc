@@ -1,0 +1,16 @@
+.title{
+    font-weight: bold;
+    font-size: small; 
+    color:white;
+ }
+ .contact-info {
+    display: flex;
+    align-items: center;
+  }
+  .contact-text {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 15px;
+    vertical-align: middle;
+    color: white !important;
+  }

@@ -1,0 +1,19 @@
+.slds-box{
+        border: 2px solid rgb(41, 40, 40);
+        padding: 6px;
+        display: flex;
+        align-items:center;
+        justify-content: space-between; 
+        background-color: white;
+        color:royalblue;
+        font-size: large;
+       
+}
+.colorCss {
+        
+        font-weight: bold;
+        font-size: large; 
+    
+    }
+
+

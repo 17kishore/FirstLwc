@@ -1,0 +1,92 @@
+<template>
+    <div class="container">
+
+        <div class="Header">
+            <div class="left">
+                <h3><span>{selectedSessionsType}</span> Sessions</h3>
+            </div>
+            <div class="right">
+                <h2>
+                    <span style="margin-top: 27px"><strong>Course:</strong></span>
+                    <lightning-combobox value={selectedSessionsType} options={recordOptions} onchange={handleSessionTypeChange} class="custom-combobox">
+                    </lightning-combobox>
+                </h2>
+            </div>
+        </div>
+
+        <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0; height: 1px; background-color: #333;">
+            <lightning-datatable
+                key-field="Id"
+                data={sessionData}
+                show-row-number-column
+                columns={columns}
+                hide-checkbox-column
+                onrowaction={handleCellAction}
+                class="custom-datatable slds-text-align_center"
+                >
+            </lightning-datatable>  
+        
+
+        <template if:true={SessionDetails}>
+            <div class="popup">
+                <h3>Session Details</h3>
+                <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem; height: 1px; background-color: #333;">
+
+                    <div class="slds-align_absolute-center">
+                        <lightning-record-form class="sldse-text-align_cnter"
+                        record-id={recordId}
+                        object-api-name="Sessions__c"
+                        layout-type="Full"
+                        columns="2"
+                        mode="readOnly"
+                    >
+                    </lightning-record-form>
+                </div>
+                <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem; height: 1px; background-color: #333;">
+                <div class="slds-p-around_small footer">
+                    <div slds-col slds-align_absolute-right>
+                        <button onclick={handleCancel}>Close</button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template if:true={downloadFiles}>
+            <div class="popup">
+                <h3>Documents</h3>
+                <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem; height: 1px; background-color: #333;">
+                <template if:true={filesList.length}>
+                <template for:each={filesList} for:item="file">
+                    <div key={file.value} class="slds-box" style="background-color: antiquewhite;">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-large-size_6-of-12 slds-medium-size_4-of-12 slds-size_12-of-12">
+                                <p>{file.label}</p>
+                            </div>
+                            <div class="slds-col slds-large-size_6-of-12 slds-medium-size_4-of-12 slds-size_12-of-12">
+                                <a href={file.url} download>Download</a>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem; height: 1px; background-color: #333;">
+                <div class="slds-p-around_small footer">
+                    <div slds-col slds-align_absolute-right>
+                        <button onclick={handleCancel}>Close</button>
+                    </div>
+                </div>
+        </template>    
+
+        <template if:false={filesList.length}>
+            <div>No files available.</div>
+            <hr class="slds-m-horizontal" style="margin-top: 0.5rem; margin-bottom: 0.5rem; height: 1px; background-color: #333;">
+            <div class="slds-p-around_small footer">
+                <div slds-col slds-align_absolute-left>
+                    <button onclick={handleCancel}>Close</button>
+                </div>
+            </div>
+        </template>   
+        </div>
+        
+        </template>
+    </div>
+</template>

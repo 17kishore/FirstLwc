@@ -1,0 +1,100 @@
+<template>
+    <div class="slds-is-relative card">
+        <nav class="navbar">
+            <div class="navbar-logo">
+               <img src={LogoUrl} alt="logo" class="my-logo" /> 
+            </div>
+            
+            <div class="navbar-help">
+               <ul>
+                <li>
+                    <span>24/7 Appointment Helpline</span>
+                    <p class="hrefcolor">
+                        <a href="tel:+91 9951910261"> +91 99519 10261 </a>  
+                    </p>
+                </li>
+               </ul>
+            </div>
+        </nav>
+
+        <!--GUEST NAVIGATION TABS-->
+        <br/>
+        <template if:false={userId}>
+            <div class="card">
+                <div class="slds-float_right ; slds-p-right_small">
+                    <div class="navbar-menu">
+                        <ul>
+                            <li><a href="/">HOME</a></li>
+                            <li><a href="/login">LOGIN/REGISTER</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+         </template>
+
+        <template if:true={userId}>
+            <template if:true={doctorProfile}>
+                <div class="slds-float_right ; slds-p-right_small">
+                    <div class="navbar-menu">
+                        <ul>
+                            <li><a href="/">HOME</a></li>
+                            <li><a href="/timesheet">TIME SLOTS</a></li>
+                            <li><a href="/upcomingappointments">UPCOMING APPOINTMENTS</a></li>
+                            <li><a href="/currentappointments">CURRENT APPOINTMENTS</a></li>
+                            <li><a href="/completedappointments">COMPLETED APPOINTMENTS</a></li>
+                            
+                                <div class="avatar-dropdown" >
+                                    <button class="avatar-btn">
+                                        <img src={UserProfilePic} alt="user Profile">
+                                    </button>
+                                    <ul class="dropdown-list">
+                                        <div class="dropdown-menu" >
+                                            <li class="dropdown-css">
+                                                <a href="/doctorprofile" style="text-align: right;">Profile</a>   
+                                            </li>  
+                                            <template if:false={isGuest}>    
+                                                <li class="dropdown-css">
+                                                    <a href={logoutLink} >Logout</a>
+                                                </li>
+                                            </template>
+                                         </div>
+                                    </ul>  
+                                </div>
+                        </ul>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={patientProfile}>
+                <div class="slds-float_right ; slds-p-right_small">
+                    <div class="navbar-menu">
+                        <ul>
+                        <li><a href="/patientprofile">HOME</a></li>
+                        <li><a href="/specilaization">BOOK APPOINTMENTS</a></li>
+                        <li><a href="/cancel-appointment">CANCEL APPOINTMENTS</a></li>
+                        <li><a href="/previousappointments">PREVIOUS APPOINTMENTS</a></li>
+                        <div class="avatar-dropdown" >
+                            <button class="avatar-btn">
+                                <img src={UserProfilePic} alt="user Profile">
+                            </button>
+                            <ul class="dropdown-list">
+                                <div class="dropdown-menu" >
+                                    <li class="dropdown-css">
+                                        <a href="/patientprofileeditpage">Edit Profile</a>
+                                        <a href="/changepassword" >Change Password</a>
+                                    </li>  
+                                    <template if:false={isGuest}>    
+                                        <li class="dropdown-css">
+                                            <a href={logoutLink}>Logout</a>
+                                        </li>
+                                    </template>
+                                 </div>
+                            </ul>  
+                        </div>
+                    </ul>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

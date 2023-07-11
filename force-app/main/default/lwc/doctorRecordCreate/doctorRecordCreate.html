@@ -1,0 +1,24 @@
+<template>
+    <lightning-card title="CREATE DOCTOR" class="slds-theme_shade" >
+        <lightning-record-form id="recordViewForm"
+                    object-api-name={objectApiName}
+                    fields={fields}
+                    onsuccess={handleSuccess}
+                    class="slds-m-top_medium">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                    <lightning-input-field field-name={NAME_FIELD}></lightning-input-field>
+                    <lightning-input-field field-name={EMAIL_FIELD}></lightning-input-field>
+                    <lightning-input-field field-name={MOBILE_FIELD} pattern="[0-9]{10}" 
+                                        title="Please enter a 10-digit mobile number"></lightning-input-field>
+                </div>
+                <div class="slds-col">
+                    <lightning-input-field field-name={SPECIALITY_FIELD}></lightning-input-field>
+                    <lightning-input-field field-name={ADDRESS_FIELD}></lightning-input-field>
+                    <lightning-input-field field-name={ACHIEVEMENT_FIELD}></lightning-input-field>
+                </div>
+            </div>
+        
+        </lightning-record-form>
+    </lightning-card>
+</template>

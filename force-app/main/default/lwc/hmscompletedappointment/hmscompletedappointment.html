@@ -1,0 +1,59 @@
+<template>
+   
+    <template if:false={records}>
+        <div class="slds-align_absolute-center title">No Completed Appointments you have...</div>     
+    </template>
+    <template if:true={records}>
+    <lightning-card title="Completed Appointments">
+        <lightning-datatable
+            key-field="id"
+            data={records}
+            show-row-number-column
+            columns={columns}
+            hide-checkbox-column
+            onrowaction={handleclick}
+            is-editable
+            >
+        </lightning-datatable>  
+    </lightning-card>      
+    </template>
+
+    <template if:true={showModal}>
+        <template if:true={recId}>
+        
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                <div class="booked slds-align_absolute-center"><lightning-record-form
+                    record-id={recId}
+                    object-api-name="Prescription__c"
+                    layout-type="Full"
+                    columns="4"
+                    mode="readOnly"
+                >
+                </lightning-record-form></div>
+            </div>
+            <div class="slds-modal__footer">
+            <button class="slds-button slds-button_brand" onclick={handleCancel}>Cancel</button>
+            </div>
+            </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+    </template>
+    <template if:true={excep}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
+                <div class="booked slds-align_absolute-center">No Prescription provided by the doctor!</div>
+            </div>
+            <div class="slds-modal__footer">
+            <button class="slds-button slds-button_brand" onclick={excepCancel}>Cancel</button>
+            </div>
+            </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+       </template>
+    
+    
+</template>

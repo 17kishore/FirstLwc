@@ -1,0 +1,46 @@
+<template>
+<lightning-card>
+    <lightning-tabset >
+        <div class="slds-m-left_medium">
+        <lightning-tab label={getDate1} >
+       
+            <lightning-record-form
+            record-id={date1id}
+            object-api-name="Time_Slot__c"
+            layout-type="Full"
+            mode="readOnly"
+        >
+        </lightning-record-form>
+        </lightning-tab>
+    
+        <lightning-tab label={getDate2}>
+            <lightning-record-form
+            record-id={date2id}
+            object-api-name="Time_Slot__c"
+            layout-type="Full"
+            mode="readOnly"
+        >
+        </lightning-record-form>
+        </lightning-tab>
+        <lightning-tab label={getDate3}>
+            <lightning-record-form
+            record-id={date3id}
+            object-api-name="Time_Slot__c"
+            layout-type="Full"
+           
+        >
+        </lightning-record-form>
+        </lightning-tab>
+        <lightning-tab label={getDate4} >
+            <lightning-record-form
+            record-id={date4id}
+            object-api-name="Time_Slot__c"
+            layout-type="Full"
+           
+        >
+        </lightning-record-form>
+        </lightning-tab>
+    </div>
+    </lightning-tabset>
+</lightning-card>
+</template>

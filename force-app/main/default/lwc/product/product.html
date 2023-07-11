@@ -1,0 +1,25 @@
+<template>
+
+    <lightning-card>
+        
+        <lightning-input type="number"   name="Stock" label="Update Stock"  onchange={handleChange}></lightning-input>
+        <br/>
+         <template if:true={isShow}>
+            <div class="result">
+                Product Name: {product.name}<br/>
+                Product Price:{product.price}<br/>
+                Product Stock:{product.stock}<br/>
+              </div>
+         </template>
+
+         <template if:false={isShow}>
+            <div class="lessStock">
+                {lessStock}
+            </div>
+            
+        </template>
+         
+      
+    </lightning-card>
+    
+</template>

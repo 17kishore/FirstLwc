@@ -1,0 +1,49 @@
+<template>
+    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+        <thead>
+            <tr>
+                <th>Appointment Id</th>
+                <th>Patient Name</th>
+                <th>TimeSlot</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <template for:each={records} for:item="record" for:index="index">
+                <tr key={record.Id}>
+                    <td>
+                        <div if:false={record.isEditing}>{record.Name}</div>
+                        <lightning-input if:true={record.isEditing} type="text" value={record.Name} onchange={handleInputChange} data-record-id={record.Id} data-field-name="Name"></lightning-input>
+                    </td>
+                    <td>
+                        <div if:false={record.isEditing}>{record.patient_name__c}</div>
+                        <lightning-input if:true={record.isEditing} type="text" value={record.patient_name__c} onchange={handleInputChange} data-record-id={record.Id} data-field-name="patient_name__c"></lightning-input>
+                    </td>
+                    <td>
+                        <div if:false={record.isEditing}>{record.Booked_Slot__c}</div>
+                        <lightning-input if:true={record.isEditing} type="text" value={record.Booked_Slot__c} onchange={handleInputChange} data-record-id={record.Id} data-field-name="Booked_Slot__c"></lightning-input>
+                    </td>
+                    <td>
+                        <div if:false={record.isEditing}>{record.Appointment_Date__c}</div>
+                        <lightning-input if:true={record.isEditing} type="text" value={record.Appointment_Date__c} onchange={handleInputChange} data-record-id={record.Id} data-field-name="Appointment_Date__c"></lightning-input>
+                    </td>
+                    <td>
+                        <div if:false={record.isEditing}>{record.Appointment_Status__c}</div>
+                        <lightning-input if:true={record.isEditing} type="picklist" value={record.Appointment_Status__c} onchange={handleInputChange} data-record-id={record.Id} data-field-name="Appointment_Status__c"></lightning-input>
+                    </td>
+                    <td>
+                        <template if:false={record.isEditing}>
+                            <lightning-button label="Edit" onclick={handleEditClick} data-record-id={record.Id}></lightning-button>
+                        </template>
+                        <template if:true={record.isEditing}>
+                            <lightning-button label="Save" variant="brand" onclick={handleSaveClick} data-record-id={record.Id}></lightning-button>
+                            <lightning-button label="Cancel" onclick={handleCancelClick} data-record-id={record.Id}></lightning-button>
+                        </template>
+                    </td>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+</template>

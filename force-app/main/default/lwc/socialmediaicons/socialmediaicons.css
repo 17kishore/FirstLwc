@@ -1,0 +1,17 @@
+.Footer { 
+    align-items:center; 
+    display:flex; 
+     
+}
+.Footer .Link {
+     padding:10px; 
+}
+.title{
+    font-weight: bold;
+    font-size: small; 
+    color:white;
+ }
+.Footer .Link img { 
+    width:32px;
+ }
+ 

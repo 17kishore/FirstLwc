@@ -1,0 +1,17 @@
+<template>
+ 
+    <lightning-card>
+       
+        <template for:each={posts} for:item="post">
+            <div key={post.id}>
+                {post.userId}<br/>
+                {post.id}<br/>
+                {post.title}<br/>
+                {post.body}<br/>
+            </div>
+        </template>
+        <br/>
+        <lightning-button label="Get Data" onclick={handleClick} variant="brand"> </lightning-button>
+    </lightning-card>
+    
+</template>

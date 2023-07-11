@@ -1,0 +1,13 @@
+:host {
+    font-family: Arial, sans-serif;
+    border: 1px solid #ccc;
+}
+
+.slds-form-element__label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.slds-form-element__control {
+    font-size: 16px;
+}

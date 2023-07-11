@@ -1,0 +1,29 @@
+<template>
+    <lightning-card >
+        <div class="slds-align_absolute-center">
+            <div class="colorCss">
+                TODO-LIST
+            </div>
+        </div>
+        <br/>
+        <template for:each={todoArray} for:item="arr">
+            <div key={arr.id}>
+                <div class="slds-box slds-box_xx-small">
+                    <div class="slds-align_absolute-center">{arr.task}</div>
+                    <lightning-icon icon-name="utility:error" alternative-text="Error!" title="Click to Remove" onclick={handleIconClick} data-i={arr.id}></lightning-icon>
+                </div>
+            </div>
+        </template>
+        <div slot="footer" >
+            <div class="slds-grid">
+                <div class="slds-col slds-size_8-of-12">
+                    <lightning-input variant="label-hidden" name="Add Task" value={addToList} onchange={handleChange}></lightning-input>
+                </div>
+                <div class="slds-col slds-size_4-of-12 slds-align_absolute-center">
+                    <lightning-button variant="brand" name="ADD" label="ADD TASK" onclick={handleClick} ></lightning-button>
+                </div>
+            </div>
+            
+        </div>
+    </lightning-card>
+</template>

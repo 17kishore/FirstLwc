@@ -1,0 +1,20 @@
+<template>
+    <lightning-card>
+      <div class="slds-size_4-of-4">
+          <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small">Favorite Players
+              <lightning-carousel>
+                  <template for:each={playerslist} for:item="p">
+                      <lightning-carousel-image
+                          key={p.jerseyNumber}
+                          src={p.img}
+                          header={p.name}
+                          description={p.description}
+                         >
+                      </lightning-carousel-image>
+                  </template>
+              </lightning-carousel>
+          </div>
+      </div>
+    </lightning-card>
+  </template>
+  

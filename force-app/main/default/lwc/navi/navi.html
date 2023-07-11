@@ -1,0 +1,39 @@
+<template>
+<lightning-card>
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <a href="/"><img src={LogoUrl} alt="logo" class="my-logo" /> </a>
+        </div>
+        
+        <div class="navbar-help">
+           <ul>
+            <li>
+                <span>24/7 Appointment Helpline</span>
+                <p class="hrefcolor">
+                    <a href="tel:+91 9951910261"> +91 82748 92478 </a>  
+                </p>
+            </li>
+           </ul>
+        </div>
+    </nav>
+    <div class="slds-float_right; slds-p-right_small">
+        <div class="navbar-menu"> 
+            <ul>
+                <li><a href="/">HOME</a></li>
+                <li><a href="/about-us">ABOUT US</a></li>
+                <li><a href="/locations">LOCATIONS</a></li>
+                <li><a href="/specialities">SPECIALITIES</a></li>
+            <template if:false={userId}>
+                <li><a href="/login">LOGIN</a></li>
+            </template>
+            <template if:true={userId}>
+                <li><a href="/my-record">MY RECORD</a></li>
+            </template>
+            <template if:false={isGuest}>
+                <li><a href={logoutLink}>LOGOUT</a></li>
+            </template>
+            </ul>
+        </div>
+    </div>
+</lightning-card>
+</template>

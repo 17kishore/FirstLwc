@@ -1,0 +1,20 @@
+lightning-card{
+    margin-right: 2rem;
+    margin-left: 2rem;
+    padding: 3rem;
+    font-family: "Times New Roman", Times, serif;
+
+}
+
+.field-style {
+    margin-right: 3rem;
+    margin-left: 3rem;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 16px;
+    color: #333;
+    background-color: #f5f5f5;
+    padding: 3rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+}
