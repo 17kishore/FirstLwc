@@ -1,0 +1,201 @@
+import { LightningElement,wire,track } from 'lwc';
+import GETCONTACTS from '@salesforce/apex/AuraGetAllContact.getContactRecord';
+import DELETECONTACTS from '@salesforce/apex/AuraGetAllContact.deleteContact';
+import UPDATECONTACTS from '@salesforce/apex/AuraGetAllContact.updateContact';
+import { NavigationMixin } from 'lightning/navigation';
+import { refreshApex } from '@salesforce/apex';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+const headerActions =[
+    {label: 'All',checked: true,name:'all'},
+    {label: 'Related',checked: false,name:'Related'},
+    {label: 'Unrelated',checked: false, name:'Unrelated'}
+]
+ const headerActions2 = [
+    {label: 'All',checked:true,name:'all'},
+    {label: 'NULL',checked:false,name:'null' },
+    {label: 'Not Null', checked:false, name:'notnull'}
+]
+ const COLUMNS = [
+    { label: 'Name', fieldName: 'LastName', type: 'text', sortable: true, editable: true},
+    {label: 'Age',fieldName: 'age',type: 'number',sortable: true,cellAttributes: { alignment: 'left' },},
+    { label: 'Email', fieldName: 'Email', type: 'email',editable: true,actions:headerActions2 },
+    { label: 'Account Name', fieldName: 'AccountName', type: 'text',actions:headerActions },
+    { label: 'Id', fieldName: 'Id', type: 'text' }
+]
+
+export default class Assignment3 extends NavigationMixin(LightningElement) {
+    
+    columns=COLUMNS;
+    defaultSortDirection = 'asc';
+    sortDirection = 'asc';
+    sortedBy;
+    data=[];
+    allData=[];
+    @track wiredContactList = [];
+    deleteButton=false;
+
+ @wire(GETCONTACTS)
+ contacts(result){
+
+    this.wiredContactList=result;
+    if(result.data){
+
+    let demoObj = [];
+        for(let i=0; i<result.data.length; i++){
+            let obj={};
+            obj=JSON.parse(JSON.stringify(result.data[i]));
+            if(result.data[i].AccountId!==undefined){
+            obj.AccountName =result.data[i].Account.Name;
+      }
+          demoObj.push(obj)
+      } 
+          this.data = JSON.parse(JSON.stringify(demoObj));
+          this.allData=JSON.parse(JSON.stringify(demoObj));
+      }     
+          else if(result.error) {
+          console.log(result.error);
+    }
+  }
+  sortBy(field, reverse, primer) {
+    const key = primer
+        ? function (x) {
+              return primer(x[field]);
+          }
+        : function (x) {
+              return x[field];
+          };
+
+    return function (a, b) {
+        a = key(a);
+        b = key(b);
+        return reverse * ((a > b) - (b > a));
+    };
+}
+onHandleSort(event) {
+    const { fieldName: sortedBy, sortDirection } = event.detail;
+    const cloneData = [...this.data];
+
+    cloneData.sort(this.sortBy(sortedBy, sortDirection === 'asc' ? 1 : -1));
+    this.data = cloneData;
+    this.sortDirection = sortDirection;
+    this.sortedBy = sortedBy;
+}
+
+createRecord(){
+    this[NavigationMixin.Navigate]({
+        type: 'standard__objectPage',
+        attributes: {
+            objectApiName: 'Contact',
+            actionName: 'new',
+        }
+    })
+}
+
+selectedRows=[];
+
+updateSelectedText(event){
+   this.selectedRows=event.detail.selectedRows;
+}
+
+handleDelete(){
+    
+    if(this.selectedRows.length===0){
+        const event = new ShowToastEvent({
+            label:'Contact',
+            message:'Select atleast one Contact to delete.',
+            variant: 'error',
+            mode: 'dismissable'
+        });
+        this.dispatchEvent(event);
+    } 
+    else if(this.selectedRows.length>0){
+
+        this.deleteButton=!this.deleteButton;
+
+    DELETECONTACTS({conList:this.selectedRows})
+    .then(() => {
+
+        refreshApex(this.wiredContactList);
+        this.template.querySelector('lightning-datatable').selectedRows=[];
+        this.selectedRows=[];
+        const event = new ShowToastEvent({
+            label:'Contact',
+            message:'Contacts Successfully Deleted.',
+            variant: 'success',
+            mode: 'dismissable'
+
+        });
+        this.dispatchEvent(event);
+        this.deleteButton=!this.deleteButton;
+       
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+}
+
+}
+
+draftValues = [];
+
+ handleSaveEdition(event){
+    this.draftValues = event.detail.draftValues;
+    
+    UPDATECONTACTS({conList:this.draftValues})
+    .then(()=>{
+        this.draftValues='';
+        refreshApex(this.wiredContactList);
+        const evt = new ShowToastEvent({
+            label:'Contact',
+            message:'Contacts Successfully Updated.',
+            variant: 'success',
+            mode: 'dismissable'
+        });
+        this.dispatchEvent(evt);
+      })
+       .catch((error)=>{
+        console.log(error);
+      })
+   }
+
+   handleHeaderAction(event){
+
+        const actionName = event.detail.action.name;
+        const label = event.detail.action.label;
+    
+        let demoData = this.allData;
+        let dummyData = [];
+        for(let i=0; i<demoData.length; i++){
+            if(actionName === 'all'){
+                dummyData = demoData;
+            }
+            else if(actionName === 'Related'){
+                if(demoData[i].AccountId!=null){
+                    dummyData.push(demoData[i]);
+                }
+            }
+            else if(actionName === 'Unrelated'){
+                if(demoData[i].AccountId==null){
+                    dummyData.push(demoData[i]);
+                }
+            }
+            else if(actionName === 'null'){
+                if(demoData[i].Email==null){
+                    dummyData.push(demoData[i]);
+                }
+            }
+            else if(actionName === 'notnull'){
+                if(demoData[i].Email!=null){
+                    dummyData.push(demoData[i]);
+                }
+            }
+            else if(label === 'Clip text'){
+                dummyData.push(demoData[i]);
+            } 
+            else if(label === 'Wrap text'){
+                dummyData.push(demoData[i]);
+            }
+        }
+        this.data=dummyData;
+   }
+}
