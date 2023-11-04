@@ -1,0 +1,14 @@
+const car1 = new Promise((_, reject) => 
+  setTimeout(reject,1000,'car1'));
+const car2 = new Promise(resolve => 
+  setTimeout(resolve,1500,'car2'));
+const car3 = new Promise(resolve => 
+  setTimeout(resolve,2000,'car3'));
+
+ promise.car([car1,car2,car3])
+.then((result) => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error)
+})
