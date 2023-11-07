@@ -1,11 +1,11 @@
-function execute(){
-    return new promise((resolve,reject)=>reject());
-}
-let promise=execute();
-
-promise
- .then(()=> console.log('resolved1'));
- .then(()=> console.log('resolved2'));
- .then(()=> console.log('resolved3'));
- .catch(()=> console.log('rejected'));
- .then(()=> console.log('resolved4'));
+const sum3=(arr)=>{
+    if(!arr.length) return 0;
+    if(arr.length===1) return arr[0];
+    if(arr.length===2) return arr[0]+arr[1];
+    return arr[0]+arr[1]+arr[2];
+    
+};
+console.assert(sum3([0])===0);
+console.assert(sum3([-3,2])===-1);
+console.assert(sum3([1, '2'])==12);
+console.assert(sum3(['hello',2,3,4])===NaN);
