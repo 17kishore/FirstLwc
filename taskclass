@@ -1,0 +1,235 @@
+
+public class TaskManagerViewCtrl {
+    public static final String FILTER_TYPE_NAME = 'Search';
+    public static final String SUMMARY_TYPE_NAME = 'Summary';
+    public static final String TASK_OBJECT = 'MPI_Task__C';
+
+    @AuraEnabled(cacheable=true)
+    public static fileldDescriveWithOnloaddataWrapper getCustomMetadataConfig(String caseId){ 
+        fileldDescriveWithOnloaddataWrapper retunobj = new fileldDescriveWithOnloaddataWrapper();
+        retunobj.returnSchemaWrap = new List<filterWrapper>();
+        retunobj.taskStatusPickListValues = new  List<picklist>();
+        List<Task_View_Config__mdt> listOfMetadataForFilter = 
+            new List<Task_View_Config__mdt>([SELECT Id,DeveloperName, Field_Api_Name__c, IsActive__c, 
+                Object_Api_Name__c, Where_to_Use__c,Field_Order__c ,Clickable_With_Record__c
+            FROM Task_View_Config__mdt 
+            WHERE IsActive__c = true 
+            ORDER BY Field_Order__c ASC
+            ]);
+
+        if(!listOfMetadataForFilter.isEmpty()){
+            Map<String, Schema.SObjectType> schemaMap = Schema.getGlobalDescribe();
+            Map<String, Schema.SObjectField> taskSchemaFieldMap = schemaMap.get(TASK_OBJECT).getDescribe().fields.getMap();
+        
+            filterWrapper taskSchema = new filterWrapper();
+            taskSchema.objectName = TASK_OBJECT;
+            taskSchema.filedDefinitionList =new List<filedDefinition>();
+            taskSchema.objectWithFields='';
+            
+            for(Task_View_Config__mdt taskViewConfig: listOfMetadataForFilter){
+                Schema.DescribeFieldResult dfr;
+                filedDefinition objOffiledDefinition = new filedDefinition();
+                if(taskViewConfig.Object_Api_Name__c == TASK_OBJECT){
+                    dfr = taskSchemaFieldMap.get(taskViewConfig.Field_Api_Name__c).getDescribe();
+                    
+                    if(dfr.isAccessible()){
+                        objOffiledDefinition.fieldLabel = dfr.getLabel();
+                        objOffiledDefinition.dataType = schemaDisplayTypeCompatibility(dfr.getType());
+                        objOffiledDefinition.fieldApiName = taskViewConfig.Field_Api_Name__c;
+                        objOffiledDefinition.wheretoUse = taskViewConfig.Where_to_Use__c;
+                        if(taskViewConfig.Where_to_Use__c == SUMMARY_TYPE_NAME){
+                            taskSchema.objectWithFields +=taskViewConfig.Field_Api_Name__c+', ';
+                            objOffiledDefinition.clickableWithRecord = taskViewConfig.Clickable_With_Record__c;
+                        }                        
+                        if(objOffiledDefinition.dataType == 'Picklist' && taskViewConfig.Where_to_Use__c == FILTER_TYPE_NAME){
+                            List<Schema.PicklistEntry> picks = dfr.getPicklistValues();
+                            objOffiledDefinition.pickListValues = new List<picklist>();
+                            for(Schema.PicklistEntry pick: picks){
+                                picklist pickobje = new picklist();
+                                pickobje.label = pick.getLabel();
+                                pickobje.value = pick.getValue();
+                                objOffiledDefinition.pickListValues.add(pickobje);
+                            }
+                            if(taskViewConfig.Field_Api_Name__c == 'Status__c'){
+                                retunobj.taskStatusPickListValues = objOffiledDefinition.pickListValues;
+                            }
+                        }
+                        taskSchema.filedDefinitionList.add(objOffiledDefinition);
+                    }
+                }
+            }
+
+            Map<String,String> mapObjectWithFields = new Map<String,String>();
+
+            taskSchema.objectWithFields = taskSchema.objectWithFields.removeEnd(', ');
+            if(taskSchema.objectWithFields!='' && taskSchema.objectWithFields!=null){
+                mapObjectWithFields.put(TASK_OBJECT,taskSchema.objectWithFields);
+                retunobj.returnSchemaWrap.add(taskSchema);
+            }
+            if(retunobj.taskStatusPickListValues.isEmpty()){
+                Schema.DescribeFieldResult dfr = taskSchemaFieldMap.get('Status__c').getDescribe();
+                List<Schema.PicklistEntry> picks = dfr.getPicklistValues();                
+                for(Schema.PicklistEntry pick: picks){
+                    picklist pickobje = new picklist();
+                    pickobje.label = pick.getLabel();
+                    pickobje.value = pick.getValue();
+                    retunobj.taskStatusPickListValues.add(pickobje);
+                }                
+            }
+            retunobj.returnOnloadData = getOnloadCase(caseId, mapObjectWithFields, '');
+        }
+        
+        return retunobj;
+    }
+
+    @AuraEnabled
+    public static List<CaseWithTaskWrap> getOnloaddata(String caseId, String strinObjectWithFields, String taskConditionsStr, String taskRecord){
+        Map<String,String> mapObjectWithFields = new Map<String,String>();
+        List<Object> objectList = (List<Object>)JSON.deserializeUntyped(strinObjectWithFields);
+        for(object obj:objectList){
+            Map<String, Object> tempobj =  (Map<String, Object>)obj;
+            mapObjectWithFields.put(''+tempobj.get('objectName'),''+tempobj.get('objectWithFields'));
+        }
+        if(taskRecord!=null){
+            System.debug('inside getOnloaddata: ');
+            System.debug('taskRecord: '+taskRecord);
+            //Map<String, String> mapOfValuesStr = (Map<String, String>)JSON.deserialize(taskRecord, Map<String,String>.class);
+            MPI_Task__c taskRecordToUpadte = (MPI_Task__c)JSON.deserialize(taskRecord, MPI_Task__c.class);
+            //taskRecordToUpadte.Status__c = mapOfValuesStr.get('Status');
+            System.debug('taskRecordToUpadte: '+taskRecordToUpadte);
+            update taskRecordToUpadte;
+        }
+
+        List<valuesforFilter> taskConditionsStrList = (List<valuesforFilter>)JSON.deserialize(taskConditionsStr,List<valuesforFilter>.class);
+        taskConditionsStr = '';
+        for(valuesforFilter element : taskConditionsStrList){
+            if(element.fieldValue!=null && element.fieldValue!=null){
+                taskConditionsStr += ' AND '+element.fieldName +' LIKE \'%'+element.fieldValue+'%\'';
+            }
+        }
+        return getOnloadCase(caseId, mapObjectWithFields, taskConditionsStr);
+    }
+    
+    public static List<CaseWithTaskWrap> getOnloadCase(String caseId, Map<String,String> mapObjectWithFields, String taskConditionsStr){   
+        map<Id,CaseWithTaskWrap> mapOfReturnObj = new map<Id,CaseWithTaskWrap>();   
+        set<id> caseIds = new set<id>();
+        caseIds.add(caseId);
+        
+        String query = ' SELECT Id , CaseNumber  FROM Case  WHERE Id IN :caseIds ';
+        
+        Map<Id, List<Case>> remsIdCaseListMap = new Map<Id, List<Case>>();
+        Map<Id, Case> caseMap = new Map<Id, Case>((List<Case>)Database.query(query)); 
+
+        for(Case caseDetail: caseMap.values()) {
+            CaseWithTaskWrap obj    = new CaseWithTaskWrap();
+            obj.CaseRecordId        = caseDetail.Id;
+            obj.CaseSummaryHeader   = 'Tasks Information';
+            obj.CaseNumber          = caseDetail.CaseNumber;
+            obj.listOfCaseTaskRecords = new List<MPI_Task__C>();
+            mapOfReturnObj.put(caseDetail.Id, obj);
+        }       
+    
+        if(mapObjectWithFields.containskey(TASK_OBJECT)){            
+            String taskQuery = 'SELECT Id, Related_To__c, Status__c,'+ mapObjectWithFields.get(TASK_OBJECT);
+            taskQuery = taskQuery+' FROM MPI_Task__c WHERE Related_To__c =:caseIds '+ taskConditionsStr +' Order by Name ASC';
+
+            List<MPI_Task__c> taskList = (List<MPI_Task__c>)Database.query(taskQuery);
+            Map<Id, List<MPI_Task__c>> relatedTasksMap = new Map<Id, List<MPI_Task__c>>();
+            for(MPI_Task__c taskDetail : taskList) {
+                if(mapOfReturnObj.containskey(taskDetail.Related_To__c)){
+                    CaseWithTaskWrap obj = mapOfReturnObj.get(taskDetail.Related_To__c);
+                    obj.listOfCaseTaskRecords.add(taskDetail);
+                    mapOfReturnObj.put(taskDetail.Related_To__c, obj);
+                }
+            }
+        }
+        return mapOfReturnObj.values();
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<MPI_Task_Setup__c> fetchTaskDepartmentRecords() {
+        return new List<MPI_Task_Setup__c>([SELECT Id, Name, Department__c, 
+                                    Priority__c, Task_Description__c,
+                                    Subject__c, Task_Type__c  
+                                FROM MPI_Task_Setup__c where Task_Creation_Types__c = 'Case' 
+                                LIMIT 100]);
+    }
+
+    @AuraEnabled
+    public static void createSelectedTasks(String caseId, List<String> selectedRecordIds) {
+        System.debug(selectedRecordIds);
+        MPITaskManagerUtility.createTasksForSetup(caseId, selectedRecordIds);
+        // Your Apex logic here to pull the selected record IDs
+    }
+
+    // POJO classes for LWC Display
+    public class CaseWithTaskWrap{
+        @AuraEnabled public List<MPI_Task__c> listOfCaseTaskRecords{get;set;}
+        @AuraEnabled public String CaseRecordId{get;set;}
+        @AuraEnabled public String CaseSummaryHeader{get;set;}
+        @AuraEnabled public String CaseNumber {get;set;}
+    }
+
+    public class fileldDescriveWithOnloaddataWrapper{
+        @AuraEnabled public List<filterWrapper> returnSchemaWrap{get;set;}
+        @AuraEnabled public List<CaseWithTaskWrap> returnOnloadData{get;set;}
+        @AuraEnabled public List<picklist> taskStatusPickListValues{get;set;}
+    }
+
+    public class filterWrapper{
+        @AuraEnabled  public List<filedDefinition> filedDefinitionList{get;set;}
+        @AuraEnabled  public string objectName{get;set;}
+        @AuraEnabled  public String objectWithFields{get;set;}        
+    }
+    public class filedDefinition{
+        @AuraEnabled  public string fieldLabel{get;set;}
+        @AuraEnabled  public string dataType{get;set;}
+        @AuraEnabled  public string fieldApiName{get;set;}
+        @AuraEnabled  public string wheretoUse{get;set;}
+        @AuraEnabled  public Boolean clickableWithRecord{get;set;}
+        @AuraEnabled  public List<picklist> pickListValues{get;set;}
+    }
+    public class picklist{
+        @AuraEnabled public string label{get;set;}
+        @AuraEnabled public string value{get;set;}
+    }
+    public class valuesforFilter{
+        @AuraEnabled public string fieldName{get;set;}
+        @AuraEnabled public string fieldValue{get;set;}
+    }
+
+    public static String schemaDisplayTypeCompatibility(DisplayType fieldType){       
+        
+        if(fieldType == Schema.DisplayType.String || fieldType == Schema.DisplayType.Combobox){
+            return 'String';
+        }else if(fieldType == Schema.DisplayType.TextArea){
+            return 'TextArea';
+        }else if(fieldType == Schema.DisplayType.Id){
+            return 'Id';
+        }else if(fieldType == Schema.DisplayType.Picklist){
+            return 'Picklist';
+        }else if(fieldType == Schema.DisplayType.Reference){
+            return 'Lookup';
+        }else if(fieldType == Schema.DisplayType.Integer || fieldType == Schema.DisplayType.Currency ||
+            fieldType == Schema.DisplayType.Double){
+            return 'Number';
+        }else if(fieldType == Schema.DisplayType.Phone){
+            return 'Phone';
+        }else if(fieldType == Schema.DisplayType.Email){
+            return 'Email';
+        }else if(fieldType == Schema.DisplayType.URL){
+            return 'URL';
+        }else if(fieldType == Schema.DisplayType.Boolean){
+            return 'Boolean';
+        }else if(fieldType == Schema.DisplayType.DateTime){
+            return 'DateTime';    
+        }else if(fieldType == Schema.DisplayType.Date){
+            return 'Date';            
+        }else if(fieldType == Schema.DisplayType.MultiPicklist){
+            return 'MultiPicklist';
+        }else{                                         
+            return 'UNKNOWN';  
+        }  
+    }
+
+}
