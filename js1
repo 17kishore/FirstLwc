@@ -1,11 +1,51 @@
-const sum3=(arr)=>{
-    if(!arr.length) return 0;
-    if(arr.length===1) return arr[0];
-    if(arr.length===2) return arr[0]+arr[1];
-    return arr[0]+arr[1]+arr[2];
+public class TaskManagerUtility {
     
-};
-console.assert(sum3([0])===0);
-console.assert(sum3([-3,2])===-1);
-console.assert(sum3([1, '2'])==12);
-console.assert(sum3(['hello',2,3,4])===NaN);
+    @AuraEnabled
+    public static void createTasks(string caseId,List<Id > taskSetupId){
+        
+       List<Acc_Task_Setup__c> taskRecords=[SELECT Id, 
+                                            Priority__c,Task_Description__c,
+                                            Subject__c  
+                                            FROM Acc_Task_Setup__c where Id IN :taskSetupId];
+        
+        Map<string,string> fieldsMap=new Map<string,string>();
+        
+        
+       List<Task_Fields_Config__mdt> listofFields=[SELECT Id,DeveloperName, 
+                                            FieldApiName__c,TaskSetupMapping__c FROM
+                                            Task_Fields_Config__mdt];
+        
+        for(Task_Fields_Config__mdt fields:listofFields){
+            fieldsMap.put(fields.FieldApiName__c,fields.TaskSetupMapping__c);
+        }
+        
+      
+        string objectName=TaskManager.getObjectName();
+        List<sObject> recordList=new List<sObject>();
+        Type objType=Type.forName('schema.'+objectName);
+        
+        String sTaskField='';
+        
+        for(Acc_Task_Setup__c tr:taskRecords){
+            for(string mdt:fieldsMap.keyset()){
+                sObject newRecord=(sObject)objType.newInstance();
+                sTaskField=fieldsMap.get(mdt);
+                if(mdt=='Related_To__c'){
+                    newRecord.put(mdt,caseId);
+                } else {
+                   newRecord.put(mdt,tr.get(sTaskField));
+                }
+                 recordList.add(newRecord);
+             }
+        }
+            
+        try{
+            insert recordList;
+        }
+        catch(exception e){
+            system.debug(e.getMessage());
+        }
+        
+    }
+
+}
