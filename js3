@@ -1,0 +1,100 @@
+<template>
+    <lightning-card title="Pagination demo contact" icon-name="custom:custom63">
+        <div class="slds-var-m-around_medium">
+            <template if:true={visibleContacts}>
+                <lightning-datatable
+                key-field="Id"
+                data={visibleContacts}
+                columns={columns}>
+        </lightning-datatable>
+            </template>
+            <br/>
+            <lightning-layout>
+                <lightning-layout-item>
+                    <lightning-button  icon-name="utility:jump_to_left" onclick={fullpreviousHandler} disabled={disablePrevious} variant="base"></lightning-button>
+                    <lightning-button  icon-name="utility:chevronleft" onclick={previousHandler} disabled={disablePrevious} variant="base"></lightning-button>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="grow">
+                    <p class="slds-text-align_center tet">Displaying {currentPage} of {totalPage} Page</p>
+                </lightning-layout-item>
+                <lightning-layout-item>
+                    <lightning-button icon-name="utility:chevronright" icon-position="right" onclick={nextHandler} disabled={disableNext} variant="base"></lightning-button>
+                    <lightning-button icon-name="utility:jump_to_right" icon-position="right" onclick={fullnextHandler} disabled={disableNext} variant="base"></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+</template>
+
+
+import { LightningElement,wire } from 'lwc';
+import getContactList from '@salesforce/apex/DataController.getContactList';
+const columns = [
+    { label: 'Name', fieldName: 'Name' },
+    { label: 'Annual Revenue', fieldName: 'AnnualRevenue' },
+    { label: 'Industry', fieldName: 'Industry' },
+   
+];
+
+export default class Pagination extends LightningElement {
+
+    columns=columns;
+
+    totalContacts
+    visibleContacts
+
+    currentPage =1
+    totalRecords
+    recordSize = 5
+    totalPage = 0
+
+    @wire(getContactList)
+    wiredContact({error, data}){
+        if(data){ 
+            this.totalRecords = data
+            this.recordSize = Number(this.recordSize)
+            this.totalPage = Math.ceil(data.length/this.recordSize)
+            this.updateRecords()
+        }
+        if(error){
+            console.error(error)
+        }
+    }
+
+    get disablePrevious(){ 
+        return this.currentPage<=1
+    }
+    get disableNext(){ 
+        return this.currentPage>=this.totalPage
+    }
+
+    fullpreviousHandler(){
+
+    }
+
+    previousHandler(){ 
+        if(this.currentPage>1){
+            this.currentPage = this.currentPage-1
+            this.updateRecords()
+        }
+    }
+
+    fullnextHandler(){
+
+    }
+    
+    nextHandler(){
+        if(this.currentPage < this.totalPage){
+            this.currentPage = this.currentPage+1
+            this.updateRecords()
+        }
+    }
+
+    updateRecords(){ 
+        const start = (this.currentPage-1)*this.recordSize
+        const end = this.recordSize*this.currentPage
+        this.visibleContacts = this.totalRecords.slice(start, end)
+    }
+
+
+}
