@@ -1,0 +1,23 @@
+<div class="slds-modal__footer">
+
+            <lightning-layout>
+                
+                <lightning-layout-item>
+                    <div class="slds-select_container">
+                        <select class="slds-select" id="recordsPerPage" onchange={handleRecordsPerPage}>
+                            <template for:each={pageSizeOptions} for:item="option">
+                                <option key={option} value={option}>{option}</option>
+                            </template>
+                        </select>
+                    </div>
+                    <lightning-button  icon-name="utility:jump_to_left" onclick={fullpreviousHandler} disabled={disablePrevious} variant="base" class="slds-button_icon-large slds-m-left_small"></lightning-button>
+                    <lightning-button  icon-name="utility:left" onclick={previousHandler} disabled={disablePrevious} variant="base" class="slds-button_icon-large"></lightning-button>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="grow">
+                    <p class="slds-align_absolute-center slds-badge slds-m-top_xxx-small pagestextsize">Displaying {currentPage} of {totalPage} Page</p>
+                </lightning-layout-item>
+                <lightning-layout-item>
+                    <lightning-button icon-name="utility:right" icon-position="right" onclick={nextHandler} disabled={disableNext} variant="base" class="slds-button_icon-large"></lightning-button>
+                    <lightning-button icon-name="utility:jump_to_right" icon-position="right" onclick={fullnextHandler} disabled={disableNext} variant="base" class="slds-button_icon-large slds-m-right_small"></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
