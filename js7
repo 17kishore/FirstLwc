@@ -1,0 +1,18 @@
+ getFilteredTask({filterValues:this.TaskMaps,recordId:this.recordId,fieldsMap:this.columnValues})
+      .then((result)=>{
+            
+             if(result.length>0){
+              this.taskRecords=result;
+              this.totalRecordsLength=this.taskRecords.length;
+              let nameUrl;
+              let format;
+              alert(this.statusApiName);
+              this.taskRecords.map(row => { 
+                format=row[this.statusApiName]==='Completed'? 'slds-text-color_success':'';
+                nameUrl= `/${row.Id}`;
+                return {...row ,format,nameUrl} 
+            })
+            this.currentPage=1;
+            this.updateRecords();
+        }
+      })
