@@ -1,0 +1,359 @@
+import { LightningElement,api,wire,track} from 'lwc';
+import { getRecord, getFieldValue } from "lightning/uiRecordApi";
+import Case_Number_FIELD from "@salesforce/schema/Case.CaseNumber";
+import OBJECT_NAME from '@salesforce/apex/TaskManager.getObjectName';
+import fetchTaskSetup from '@salesforce/apex/TaskManager.fetchTaskDepartmentRecords';
+import CreateTasks from '@salesforce/apex/TaskManagerUtility.createTasks';
+import createSingleTask from '@salesforce/apex/TaskManagerUtility.createSingleTask';
+import getDisplayFields from '@salesforce/apex/TaskManagerUtility.getDisplayFieldsConfig';
+import {ShowToastEvent} from 'lightning/platformShowToastEvent';
+import GET_TASK_RECORDS from  '@salesforce/apex/TaskManager.getTaskRecords';
+import UPDATE_TASK from  '@salesforce/apex/TaskManager.updateTask';
+import { refreshApex } from '@salesforce/apex';
+const COLUMNS2 = [
+  { label: 'Task Subject', fieldName: 'Subject__c' },
+  { label: 'Department', fieldName: 'Department__c' },
+  { label: 'Priority', fieldName: 'Priority__c' },
+  { label: 'Task Type', fieldName: 'Task_Type__c' },
+];
+
+export default class Taskmanager extends LightningElement {
+
+    @api recordId;
+    @track dummycolumns1=[];
+    @track wiredTaskList = [];
+    @track fieldsMaps= {};
+    @track TaskMaps= {};
+
+    columns2=COLUMNS2;
+
+    isLoading=true;
+    taskModal=false;
+    createNewTask=false;
+    createNewTaskFromSetup=true;
+    filterModal=false;
+
+    taskObjectName;
+    totalRecordsLength;
+
+    columns=[];
+    statusValues=[];
+    taskRecords=[];
+    trimRecords=[];
+    selectedRows=[];
+    selectedIds=[];
+    lookupdata=[];
+    picklistdata=[];
+    textdata=[];
+    Filterpicklistdata=[];
+    Filtertextdata=[];
+
+    currentPage =1;
+    recordSize = 5;
+    totalPage = 0;
+    pageSize = [5, 10, 25, 50, 75, 100];
+    
+    filterModalClick(){
+          this.filterModal=!this.filterModal;
+    }
+
+    FilterChange(event){
+       let{name,value}=event.target;
+       this.TaskMaps[name]=value;
+    }
+
+    applyFilterHandler(){
+         alert(JSON.stringify(this.TaskMaps));
+    }
+
+    clearFilter(){
+
+    }
+
+    newTaskClick(){
+        this.taskModal=!this.taskModal;
+        this.selectedRows=[];
+        this.selectedIds=[];
+    }
+
+    handleChange(event){
+        let val=this.template.querySelector('.caseId');
+        this.fieldsMaps[val.name]=val.value;
+        let{name,value}=event.target;
+        this.fieldsMaps[name]=value;
+    }
+
+    submitDetails(){
+        let inputElements = this.template.querySelectorAll('.requiredField');
+        let hasValidationErrors = false;
+        inputElements.forEach(inputElement => {
+          let searchvalue = inputElement.value;
+          if (!searchvalue) {
+              inputElement.setCustomValidity("Complete the field.");
+              hasValidationErrors = true;
+          } 
+          else {
+              inputElement.setCustomValidity("");
+          }
+          inputElement.reportValidity();
+      });
+
+     if (!hasValidationErrors) {
+        this.taskModal=!this.taskModal;
+        this.isLoading=!this.isLoading;
+      createSingleTask({taskValues:this.fieldsMaps})
+      .then(()=>{
+         const event = new ShowToastEvent({
+          title: 'Success',
+          message: 'Task Created Successfully!',
+          variant: 'Success',
+          mode: 'dismissable'
+      });
+        this.dispatchEvent(event);
+        this.fieldsMaps={};
+        this.createNewTask=!this.createNewTask;
+        this.createNewTaskFromSetup=!this.createNewTaskFromSetup;
+        this.dummycolumns1=[];
+        this.statusValues=[];
+        refreshApex(this.wiredTaskList);
+    })
+      .finally(()=>{
+        this.isLoading=false;
+     })
+  }
+}
+
+     closeModal(){
+      this.taskModal=!this.taskModal;
+      this.fieldsMaps={};
+      this.createNewTask=!this.createNewTask;
+      this.createNewTaskFromSetup=!this.createNewTaskFromSetup;
+    }
+
+  @wire(getDisplayFields)
+  displayFields({data,error}){
+    if(data){
+      data.forEach((field)=>{
+        if(field.dataType==='lookup' && field.ActiveToDisplay){
+          this.lookupdata.push(field);
+        }
+        if(field.dataType==='picklist' && field.ActiveToDisplay){
+          this.picklistdata.push(field);
+        }
+        if((field.dataType==='text' || field.dataType==='date') && field.ActiveToDisplay){
+          this.textdata.push(field);
+        }
+         if(field.dataType==='picklist' && field.DisplayToFilter){
+          this.Filterpicklistdata.push(field);
+        }
+        if((field.dataType==='text' || field.dataType==='date') && field.DisplayToFilter){
+          this.Filtertextdata.push(field);
+        }
+      })
+    }
+    if(error){
+      console.log(error);
+    }
+  }
+
+    @wire(GET_TASK_RECORDS, {caseId:"$recordId"})
+    taskRecordValues(result){
+       this.wiredTaskList=result;
+      if(result.data){
+
+        let format;
+        let nameUrl;
+        let linkFieldName=result.data.recordLinkField;
+        var conts=result.data.columnValues;
+        var pickList=result.data.statusValues;
+        var statusApiName=result.data.statusField;
+  
+    for(var key in conts){
+      if(conts[key]===linkFieldName){
+        this.dummycolumns1.push({label:key,fieldName:'nameUrl',type: 'url',
+                                 typeAttributes: {label:{fieldName:conts[key]},
+                                 tooltip: { fieldName:conts[key]}}});
+      }
+      else if(conts[key]===statusApiName){
+        this.dummycolumns1.push({label:key,fieldName:conts[key], 
+                                 cellAttributes:{class: {fieldName: 'format'}}});
+      }
+      else{
+        this.dummycolumns1.push({label:key,fieldName:conts[key]});
+      }
+    }
+    for(var key in pickList){
+      this.statusValues.push({label:key,name:pickList[key]});
+    }
+    const type={
+      type: 'action',
+      typeAttributes: { rowActions: this.statusValues },
+     }
+     this.dummycolumns1.push(type);
+     this.taskRecords=result.data.taskRec;
+     this.totalRecordsLength=this.taskRecords.length;
+
+     if(this.taskRecords.length===0){
+            this.taskRecords='';
+    } 
+    else {
+            this.taskRecords=result.data.taskRec.map(row => { 
+            format=row[statusApiName]==='Completed'? 'slds-text-color_success':'';
+            nameUrl= `/${row.Id}`;
+            return {...row ,format,nameUrl} 
+      })
+  }
+      this.updateTotalPage();
+      this.updateRecords();
+      this.columns=JSON.parse(JSON.stringify(this.dummycolumns1));
+      this.isLoading=false;
+    }
+      if(result.error){
+        console.log(result.error);
+    }
+  }
+
+    @wire(getRecord, { recordId: "$recordId",fields: [Case_Number_FIELD]})
+    case;
+
+    get casenumber() {
+        return getFieldValue(this.case.data,Case_Number_FIELD);
+    }
+
+    @wire(OBJECT_NAME)
+    taskObject({data,error}){
+      if(data){
+        this.taskObjectName=data;
+       }
+      if(error){
+        console.log(error);
+      }
+    }
+
+    @wire(fetchTaskSetup)
+    taskSetupRecords;
+
+    rowSelection(event){
+      this.selectedRows=event.detail.selectedRows;
+    }
+     createTask(){
+         if(this.selectedRows.length===0){
+            const event = new ShowToastEvent({
+                label:'Task',
+                message:'Please Select a one or more Tasks',
+                variant: 'error',
+                mode: 'dismissable'
+            });
+            this.dispatchEvent(event);
+        }  
+        else {
+          this.taskModal=!this.taskModal;
+          this.isLoading=!this.isLoading;
+          this.dummycolumns1=[];
+          this.statusValues=[];
+          this.selectedRows.forEach((val)=>{
+          this.selectedIds.push(val.Id);
+       })
+      CreateTasks({caseId:this.recordId,taskSetupId:this.selectedIds})
+        .then(()=>{
+            refreshApex(this.wiredTaskList);
+            this.isLoading=!this.isLoading;  
+            this.selectedRows=[];
+            this.selectedIds=[];
+            const event = new ShowToastEvent({
+            title: 'Success',
+            message: 'Task Created Successfully!',
+            variant: 'Success',
+            mode: 'dismissable'
+        });
+           this.dispatchEvent(event);
+       })
+    }
+  }
+
+    handleHeaderAction(event){
+      this.isLoading=!this.isLoading;
+      this.dummycolumns1=[];
+      this.statusValues=[];
+      const actionName = event.detail.action.name;
+      const Id=event.detail.row.Id;
+      UPDATE_TASK({taskId:Id,statusValues:actionName})
+      .then(()=>{
+        refreshApex(this.wiredTaskList);
+        const event = new ShowToastEvent({
+          title: 'Success',
+          message: 'Task Updated Successfully!',
+          variant: 'Success',
+          mode: 'dismissable'
+      });
+         this.dispatchEvent(event);
+      })
+      .finally(()=>{
+        this.isLoading=false;
+      })
+    }
+
+     handleRadioChange(){
+       this.selectedRows=[];
+       this.selectedIds=[];
+       this.createNewTask=!this.createNewTask;
+       this.createNewTaskFromSetup=!this.createNewTaskFromSetup;
+      }
+
+    handleRadioChange2(){
+      this.createNewTask=!this.createNewTask;
+      this.createNewTaskFromSetup=!this.createNewTaskFromSetup;
+    }
+
+    get disablePrevious(){ 
+        return this.currentPage<=1;
+    }
+    get disableNext(){ 
+        return this.currentPage>=this.totalPage;
+    }
+
+    handlePage(event){
+      this.recordSize=Number(event.target.value);
+      this.totalPage=Math.ceil(this.taskRecords.length/ this.recordSize);
+      if(this.currentPage>this.totalPage){
+        this.currentPage=this.totalPage;
+        this.updateRecords();
+      } else {
+           this.updateRecords();
+      }
+    }
+
+    fullpreviousHandler(){
+      this.currentPage=1;
+      this.updateRecords();
+    }
+
+    previousHandler(){ 
+        if(this.currentPage>1){
+            this.currentPage = this.currentPage-1;
+            this.updateRecords();
+        }
+  }
+
+    fullnextHandler(){
+      this.currentPage=this.totalPage;
+      this.updateRecords();
+   }
+
+     nextHandler(){
+        if(this.currentPage < this.totalPage){
+            this.currentPage = this.currentPage+1;
+            this.updateRecords();
+        }
+    }
+
+      updateRecords(){ 
+          const start = (this.currentPage-1)*this.recordSize;
+          const end = this.recordSize*this.currentPage;
+          this.trimRecords = this.taskRecords.slice(start, end)
+    }
+      updateTotalPage(){
+          this.recordSize=Number(this.recordSize);
+          this.totalPage=Math.ceil(this.taskRecords.length/ this.recordSize);
+}
+}
