@@ -1,0 +1,12 @@
+async clearFilter(){
+     
+      this.isLoading=!this.isLoading;
+      this.dummycolumns1=[];
+      this.statusValues=[];
+      const rec=await refreshApex(this.wiredTaskList);
+      alert(this.taskRecords.length);
+      console.log(rec);
+      alert(rec.length);
+      this.isLoading=!this.isLoading;
+
+    }
