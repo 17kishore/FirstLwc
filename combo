@@ -1,0 +1,206 @@
+<template>
+
+    <lightning-card style="background-color: #560e86; border-radius: 5px; text-align: center;">
+
+        Scrubbing Field Configuration
+
+    </lightning-card>
+
+    <lightning-card>
+
+        <template if:true={b1}>
+
+            <template for:each={comboArray} for:item="combo">
+
+                <div key={combo.id} align="center" style="margin: 10px 0; display: flex;">
+
+                    <div class="slds-align_absolute-center" style="height: 5rem">
+
+                        <div style="margin-right: 10px;">
+
+                            <lightning-combobox
+
+                                name="Object"
+
+                                label="Object"
+
+                                value={combo.selectedValue}
+
+                                placeholder="Select Object"
+
+                                options={objectOptions}
+
+                                onchange={handleOnChange}
+
+                                data-index={combo.id}
+
+                            ></lightning-combobox>
+
+                        </div>
+
+                        <div style="margin-right: 10px;">
+
+                            <lightning-combobox
+
+                                name="Field"
+
+                                label="Fields"
+
+                                value={combo.selectedFieldValue}
+
+                                placeholder="Select Fields"
+
+                                options={combo.fieldOptions}
+
+                                data-index={combo.id}
+
+                                onchange={handleFieldChange}
+
+                            ></lightning-combobox>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </template>
+
+            <div style="display: flex; justify-content: center; margin-top: 10px;">
+
+                <lightning-button label="Add new Field" onclick={handleOnClickAdd}></lightning-button>
+
+                <lightning-button label="Next" onclick={handleOnClickNext}></lightning-button>
+
+            </div>
+
+        </template>
+
+        <template if:true={b2}>
+
+            <template for:each={selectedObjectsData} for:item="objectData">
+
+                <div key={objectData.objectName} class="slds-align_absolute-center">
+
+                    {objectData.objectName} - Record Count: {objectData.recordCount}
+
+                </div>
+
+            </template>
+
+            <div style="display: flex; justify-content: center; margin-top: 10px;">
+
+                <lightning-button label="Confirm & Proceed" onclick={handleConfirmAndProceed}></lightning-button>
+
+            </div>
+
+        </template>
+
+        <template if:true={b3}>
+
+            <!-- Display batch job results in a table -->
+
+            <lightning-datatable
+
+                key-field="id"
+
+                data={batchJobResults}
+
+                columns={batchJobColumns}
+
+                hide-checkbox-column="true"
+
+            ></lightning-datatable>
+
+        </template>
+
+    </lightning-card>
+
+</template>
+
+
+              ---------------------------------------
+
+              <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+<thead>
+<tr class="slds-line-height_reset">
+<th class="" scope="col">
+<div class="slds-truncate" title="Opportunity Name">Opportunity Name</div>
+</th>
+<th class="" scope="col">
+<div class="slds-truncate" title="Account Name">Account Name</div>
+</th>
+<th class="" scope="col">
+<div class="slds-truncate" title="Close Date">Close Date</div>
+</th>
+<th class="" scope="col">
+<div class="slds-truncate" title="Stage">Stage</div>
+</th>
+<th class="" scope="col">
+<div class="slds-truncate" title="Confidence">Confidence</div>
+</th>
+<th class="" scope="col">
+<div class="slds-truncate" title="Amount">Amount</div>
+</th>
+<th class="" scope="col">
+<div class="slds-truncate" title="Contact">Contact</div>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="slds-hint-parent">
+<th data-label="Opportunity Name" scope="row">
+<div class="slds-truncate" title="Cloudhub">
+<a href="#" tabindex="-1">Cloudhub</a>
+</div>
+</th>
+<td data-label="Account Name">
+<div class="slds-truncate" title="Cloudhub">Cloudhub</div>
+</td>
+<td data-label="Close Date">
+<div class="slds-truncate" title="4/14/2015">4/14/2015</div>
+</td>
+<td data-label="Prospecting">
+<div class="slds-truncate" title="Prospecting">Prospecting</div>
+</td>
+<td data-label="Confidence">
+<div class="slds-truncate" title="20%">20%</div>
+</td>
+<td data-label="Amount">
+<div class="slds-truncate" title="$25k">$25k</div>
+</td>
+<td data-label="Contact">
+<div class="slds-truncate" title="jrogers@cloudhub.com">
+<a href="#" tabindex="-1">jrogers@cloudhub.com</a>
+</div>
+</td>
+</tr>
+<tr class="slds-hint-parent">
+<th data-label="Opportunity Name" scope="row">
+<div class="slds-truncate" title="Cloudhub + Anypoint Connectors">
+<a href="#" tabindex="-1">Cloudhub + Anypoint Connectors</a>
+</div>
+</th>
+<td data-label="Account Name">
+<div class="slds-truncate" title="Cloudhub">Cloudhub</div>
+</td>
+<td data-label="Close Date">
+<div class="slds-truncate" title="4/14/2015">4/14/2015</div>
+</td>
+<td data-label="Prospecting">
+<div class="slds-truncate" title="Prospecting">Prospecting</div>
+</td>
+<td data-label="Confidence">
+<div class="slds-truncate" title="20%">20%</div>
+</td>
+<td data-label="Amount">
+<div class="slds-truncate" title="$25k">$25k</div>
+</td>
+<td data-label="Contact">
+<div class="slds-truncate" title="jrogers@cloudhub.com">
+<a href="#" tabindex="-1">jrogers@cloudhub.com</a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
